@@ -18,8 +18,8 @@ export default class TableGenerator extends Component {
   };
 
   markupIndividualRows = row => {
-    return row.map(rowItem => {
-      return <td key={rowItem}>{rowItem}</td>;
+    return row.map((rowItem, i) => {
+      return <td key={i}>{rowItem}</td>;
     });
   };
 
