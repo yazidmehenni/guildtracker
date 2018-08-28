@@ -42,24 +42,6 @@ export default class Processor extends Component {
     this.setState({ filteredMembers: filteredMembers });
   };
 
-  getRoster = async () => {
-    const params = qs.stringify({
-      locale: LOCALE,
-      apikey: APIKEY,
-      fields: 'members'
-    });
-    const requestString = `${WOW_API}/guild/${this.state.realm}/${
-      this.state.guild
-    }?${params}`;
-    const guildRoster = await (await fetch(requestString, {
-      method: 'GET'
-    })).json();
-    this.setState({
-      members: guildRoster.members,
-      filteredMembers: guildRoster.members
-    });
-  };
-
   generateRows = members => {
     const rows = members.map(member => {
       return [
@@ -116,6 +98,7 @@ export default class Processor extends Component {
   };
 
   sortListByItemLevel = () => {
+    if (!this.state.filteredMembers[0]) return;
     if (!this.state.filteredMembers[0].character.items) return;
     const orderBy = this.state.itemLevelOrder ? 'desc' : 'asc';
     this.setState({
@@ -140,10 +123,6 @@ export default class Processor extends Component {
     });
   };
 
-  componentDidMount() {
-    //this.getRoster();
-  }
-
   render() {
     const portraitHeader = <span className="thead">Portrait</span>;
     const nameHeader = (
@@ -167,20 +146,26 @@ export default class Processor extends Component {
     return (
       <main className="content">
         <section className="hero is-info is-fullheight">
-          <main className="hero-body">
+          <section className="hero-body">
             <div className="container">
               <h1 className="title is-3">{this.state.guild} Guild Stats</h1>
-              <button onClick={this.updateCharacterDetails} className="button">
-                Get Character Details
-              </button>
               <div className="field">
-                <div className="control">
+                <div className="level">
                   <input
                     onInput={this.handleSearchInput}
-                    className="input is-primary"
+                    className="input is-info"
                     type="text"
                     placeholder="Search"
                   />
+                  <div className="level-right">
+                    <button
+                      onClick={this.updateCharacterDetails}
+                      className="button is-info is-inverted"
+                    >
+                      <i className="fas fa-cloud-download-alt" />
+                      &nbsp;Get Details
+                    </button>
+                  </div>
                 </div>
               </div>
               <TableGenerator
@@ -193,7 +178,7 @@ export default class Processor extends Component {
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>
-          </main>
+          </section>
         </section>
       </main>
     );
