@@ -5,9 +5,13 @@ import React, { Component } from 'react';
 export default class TableGenerator extends Component {
   markupHeaders = tableHeaders => {
     return (
-      <tr>
-        {tableHeaders.map(tableHeader => {
-          return <th key={tableHeader}>{tableHeader}</th>;
+      <tr className="tr">
+        {tableHeaders.map((tableHeader, i) => {
+          return (
+            <th className="th" key={i}>
+              {tableHeader}
+            </th>
+          );
         })}
       </tr>
     );
@@ -15,7 +19,7 @@ export default class TableGenerator extends Component {
 
   markupIndividualRows = row => {
     return (
-      <tr key={row}>
+      <tr className="tr" key={row}>
         {row.map(rowItem => {
           return <td key={rowItem}>{rowItem}</td>;
         })}
@@ -31,7 +35,7 @@ export default class TableGenerator extends Component {
 
   generateTable = (headers, rows) => {
     return (
-      <tbody>
+      <tbody className="tbody">
         {this.markupHeaders(headers)}
         {this.markupAllRows(rows)}
       </tbody>
@@ -39,7 +43,9 @@ export default class TableGenerator extends Component {
   };
   render() {
     return (
-      <table>{this.generateTable(this.props.headers, this.props.rows)}</table>
+      <table className="table">
+        {this.generateTable(this.props.headers, this.props.rows)}
+      </table>
     );
   }
 }

@@ -8,7 +8,8 @@ export default class Processor extends Component {
     guild: 'Baewatch',
     realm: "Mal'Ganis",
     members: [],
-    memberOrder: false
+    memberOrder: false,
+    levelOrder: false
   };
 
   getRoster = async () => {
@@ -56,21 +57,46 @@ export default class Processor extends Component {
     });
   };
 
+  sortListByLevel = () => {
+    const orderBy = this.state.levelOrder ? 'desc' : 'asc';
+    this.setState({
+      members: _.orderBy(
+        this.state.members,
+        obj => obj.character.level,
+        orderBy
+      ),
+      levelOrder: !this.state.levelOrder
+    });
+  };
+
   componentDidMount() {
     this.getRoster();
   }
 
   render() {
     return (
-      <main>
-        <button onClick={this.sortListByMember}>
-          {this.state.memberOrder ? '<' : '>'}
-        </button>
-        <h1>{this.state.guild} Guild Stats</h1>
-        <TableGenerator
-          headers={['Portrait', 'Name', 'Level']}
-          rows={this.generateRows(this.state.members)}
-        />
+      <main className="content">
+        <section className="hero is-info is-fullheight">
+          <div className="hero-body">
+            <div className="container">
+              <h1 className="title is-3">{this.state.guild} Guild Stats</h1>
+              <TableGenerator
+                headers={[
+                  <span className="thead">Portrait</span>,
+                  <span className="thead" onClick={this.sortListByMember}>
+                    {'Name '}
+                    <i className="fas fa-sort" />
+                  </span>,
+                  <span className="thead" onClick={this.sortListByLevel}>
+                    {'Level '}
+                    <i className="fas fa-sort" />
+                  </span>
+                ]}
+                rows={this.generateRows(this.state.members)}
+              />
+            </div>
+          </div>
+        </section>
       </main>
     );
   }
