@@ -8,6 +8,7 @@ export default class Processor extends Component {
     guild: 'Baewatch',
     realm: "Mal'Ganis",
     members: [],
+    filteredMembers: [],
     memberOrder: false,
     levelOrder: false
   };
@@ -24,8 +25,10 @@ export default class Processor extends Component {
     const guildRoster = await (await fetch(requestString, {
       method: 'GET'
     })).json();
-    console.log(guildRoster);
-    this.setState({ members: guildRoster.members });
+    this.setState({
+      members: guildRoster.members,
+      filteredMembers: guildRoster.members
+    });
   };
 
   generateRows = members => {
@@ -48,9 +51,14 @@ export default class Processor extends Component {
   sortListByMember = () => {
     const orderBy = this.state.memberOrder ? 'desc' : 'asc';
     this.setState({
+      filteredMembers: _.orderBy(
+        this.state.filteredMembers,
+        obj => obj.character.name,
+        orderBy
+      ),
       members: _.orderBy(
         this.state.members,
-        obj => obj.character.name,
+        obj => obj.character.level,
         orderBy
       ),
       memberOrder: !this.state.memberOrder
@@ -60,6 +68,11 @@ export default class Processor extends Component {
   sortListByLevel = () => {
     const orderBy = this.state.levelOrder ? 'desc' : 'asc';
     this.setState({
+      filteredMembers: _.orderBy(
+        this.state.filteredMembers,
+        obj => obj.character.level,
+        orderBy
+      ),
       members: _.orderBy(
         this.state.members,
         obj => obj.character.level,
@@ -69,33 +82,59 @@ export default class Processor extends Component {
     });
   };
 
+  handleSearchInput = event => {
+    const searchValue = event.target.value.toLowerCase();
+    console.log(searchValue);
+    this.setState({
+      filteredMembers: _.filter(this.state.members, obj => {
+        //put all search conditions here and return true if any match
+        const isName =
+          obj.character.name.toLowerCase().indexOf(searchValue) !== -1;
+        return isName;
+      })
+    });
+  };
+
   componentDidMount() {
     this.getRoster();
   }
 
   render() {
+    const portraitHeader = <span className="thead">Portrait</span>;
+    const nameHeader = (
+      <span className="thead" onClick={this.sortListByMember}>
+        Name&nbsp;
+        <i className="fas fa-sort" />
+      </span>
+    );
+    const levelHeader = (
+      <span className="thead" onClick={this.sortListByLevel}>
+        Level&nbsp;
+        <i className="fas fa-sort" />
+      </span>
+    );
     return (
       <main className="content">
         <section className="hero is-info is-fullheight">
-          <div className="hero-body">
+          <main className="hero-body">
             <div className="container">
               <h1 className="title is-3">{this.state.guild} Guild Stats</h1>
+              <div className="field">
+                <div className="control">
+                  <input
+                    onInput={this.handleSearchInput}
+                    className="input is-primary"
+                    type="text"
+                    placeholder="Search"
+                  />
+                </div>
+              </div>
               <TableGenerator
-                headers={[
-                  <span className="thead">Portrait</span>,
-                  <span className="thead" onClick={this.sortListByMember}>
-                    {'Name '}
-                    <i className="fas fa-sort" />
-                  </span>,
-                  <span className="thead" onClick={this.sortListByLevel}>
-                    {'Level '}
-                    <i className="fas fa-sort" />
-                  </span>
-                ]}
-                rows={this.generateRows(this.state.members)}
+                headers={[portraitHeader, nameHeader, levelHeader]}
+                rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>
-          </div>
+          </main>
         </section>
       </main>
     );
