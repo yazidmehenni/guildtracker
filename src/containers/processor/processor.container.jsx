@@ -5,8 +5,10 @@ import { WOW_API, LOCALE, APIKEY } from '../../env/env.js';
 export default class Processor extends Component {
   state = {
     guild: 'Baewatch',
-    realm: "Mal'Ganis"
+    realm: "Mal'Ganis",
+    members: []
   };
+
   getRoster = async () => {
     const params = qs.stringify({
       locale: LOCALE,
@@ -19,12 +21,41 @@ export default class Processor extends Component {
     const guildRoster = await (await fetch(requestString, {
       method: 'GET'
     })).json();
-    console.log(guildRoster);
+    this.setState({ members: guildRoster.members });
   };
+
+  generateTable = () => {
+    return this.state.members.map(member => {
+      return (
+        <tr>
+          <td key={member.character.name}>
+            {member.character.name}
+            {console.log(member.character.name)}
+          </td>
+        </tr>
+      );
+    });
+  };
+
   componentDidMount() {
     this.getRoster();
   }
+
   render() {
-    return <div />;
+    return (
+      <main>
+        <h1> {this.state.guild} Member Info</h1>
+        <table>
+          <tbody>
+            <tr>
+              <th>Character</th>
+              <th>Rank</th>
+              <th>iLevel</th>
+            </tr>
+            {this.generateTable()}
+          </tbody>
+        </table>
+      </main>
+    );
   }
 }
