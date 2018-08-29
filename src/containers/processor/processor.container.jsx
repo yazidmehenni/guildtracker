@@ -3,12 +3,15 @@ import qs from 'qs';
 import { WOW_API, LOCALE, APIKEY } from '../../env/env.js';
 import TableGenerator from '../../components/tablegenerator.component.jsx';
 import _ from 'lodash';
+import { Link } from 'react-router-dom';
+import Animate from 'react-smooth';
+
 export default class Processor extends Component {
   state = {
     guild: this.props.guildName,
     realm: this.props.realmName,
-    members: this.props.members,
-    filteredMembers: this.props.members,
+    members: [],
+    filteredMembers: [],
     memberOrder: false,
     levelOrder: false,
     itemLevelOrder: false
@@ -40,8 +43,10 @@ export default class Processor extends Component {
   };
 
   generateRows = members => {
-    const rows = members.map(member => {
+    const rows = members.map((member, i) => {
+      // console.log(member.character.spec.icon);
       return [
+        i + 1,
         <figure className="image is-64x64">
           <img
             className="is-rounded"
@@ -52,8 +57,18 @@ export default class Processor extends Component {
             }
           />
         </figure>,
+        '',
+        //   <figure className="image is-64x64">
+        //   <img
+        //     className="is-rounded"
+        //     alt={'character portrait for ' + member.character.name}
+        //     src={
+        //       'https://render-us.worldofwarcraft.com/icons/56/' +
+        //       member.character.spec.icon + '.jpg'
+        //     }
+        //   />
+        // </figure>,
         member.character.name,
-        member.character.level,
         member.character.items
           ? member.character.items.averageItemLevel +
             (' (' + member.character.items.averageItemLevelEquipped + ')')
@@ -77,23 +92,6 @@ export default class Processor extends Component {
         orderBy
       ),
       memberOrder: !this.state.memberOrder
-    });
-  };
-
-  sortListByLevel = () => {
-    const orderBy = this.state.levelOrder ? 'desc' : 'asc';
-    this.setState({
-      filteredMembers: _.orderBy(
-        this.state.filteredMembers,
-        obj => obj.character.level,
-        orderBy
-      ),
-      members: _.orderBy(
-        this.state.members,
-        obj => obj.character.level,
-        orderBy
-      ),
-      levelOrder: !this.state.levelOrder
     });
   };
 
@@ -123,16 +121,45 @@ export default class Processor extends Component {
     });
   };
 
+  getRoster = async () => {
+    const params = qs.stringify({
+      locale: LOCALE,
+      apikey: APIKEY,
+      fields: 'members'
+    });
+    const requestString = `${WOW_API}/guild/${this.props.realmName}/${
+      this.props.guildName
+    }?${params}`;
+    const guildRoster = await (await fetch(requestString, {
+      method: 'GET'
+    })).json();
+    let formComplete = true;
+    let status = null;
+    if (guildRoster.status === 'nok') {
+      formComplete = false;
+      status = 'Invalid Guild Name or Realm';
+    }
+    const filteredMembers = _.filter(
+      guildRoster.members,
+      obj => obj.character.level === 120
+    );
+    this.setState({
+      status: status,
+      formComplete: formComplete,
+      members: filteredMembers,
+      filteredMembers: filteredMembers
+    });
+    return true;
+  };
+
+  componentDidMount() {
+    this.getRoster();
+  }
+
   render() {
     const nameHeader = (
       <span className="thead" onClick={this.sortListByMember}>
         Name&nbsp;
-        <i className="fas fa-sort" />
-      </span>
-    );
-    const levelHeader = (
-      <span className="thead" onClick={this.sortListByLevel}>
-        Level&nbsp;
         <i className="fas fa-sort" />
       </span>
     );
@@ -143,11 +170,27 @@ export default class Processor extends Component {
         <i className="fas fa-sort" />
       </span>
     );
+
     return (
-      <main className="content">
+      <Animate to={'0.99'} from={'0.01'} attributeName="opacity" duration={500}>
         <section className="hero is-info is-fullheight">
           <section className="hero-body">
             <div className="container">
+              <div className="level">
+                <Link to="/">
+                  <button className="button is-link is-inverted is-outlined level-left">
+                    <i className="fas fa-chevron-left" />
+                    &nbsp;Back
+                  </button>
+                </Link>
+              </div>
+              <div className="section">
+                {this.state.status && (
+                  <span className="tag is-danger is-large">
+                    {this.state.status}
+                  </span>
+                )}
+              </div>
               <h1 className="title is-3">
                 {'<'}
                 {this.state.guild}
@@ -173,13 +216,13 @@ export default class Processor extends Component {
                 </div>
               </div>
               <TableGenerator
-                headers={['', nameHeader, levelHeader, itemLevelHeader]}
+                headers={['#', '', 'class/spec', nameHeader, itemLevelHeader]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>
           </section>
         </section>
-      </main>
+      </Animate>
     );
   }
 }

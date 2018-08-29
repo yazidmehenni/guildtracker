@@ -43,7 +43,7 @@ export default class TableGenerator extends Component {
   };
   render() {
     return (
-      <table className="table">
+      <table className="table is-fullwidth">
         {this.generateTable(this.props.headers, this.props.rows)}
       </table>
     );
