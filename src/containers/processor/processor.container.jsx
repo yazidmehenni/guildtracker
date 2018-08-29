@@ -40,8 +40,10 @@ export default class Processor extends Component {
   };
 
   generateRows = members => {
-    const rows = members.map(member => {
+    const rows = members.map((member, i) => {
+      // console.log(member.character.spec.icon);
       return [
+        i + 1,
         <figure className="image is-64x64">
           <img
             className="is-rounded"
@@ -52,6 +54,17 @@ export default class Processor extends Component {
             }
           />
         </figure>,
+        '',
+        //   <figure className="image is-64x64">
+        //   <img
+        //     className="is-rounded"
+        //     alt={'character portrait for ' + member.character.name}
+        //     src={
+        //       'https://render-us.worldofwarcraft.com/icons/56/' +
+        //       member.character.spec.icon + '.jpg'
+        //     }
+        //   />
+        // </figure>
         member.character.name,
         member.character.level,
         member.character.items
@@ -173,7 +186,14 @@ export default class Processor extends Component {
                 </div>
               </div>
               <TableGenerator
-                headers={['', nameHeader, levelHeader, itemLevelHeader]}
+                headers={[
+                  '#',
+                  '',
+                  'class/spec',
+                  nameHeader,
+                  levelHeader,
+                  itemLevelHeader
+                ]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>

@@ -44,6 +44,7 @@ export default class TableGenerator extends Component {
   render() {
     return (
       <table className="table">
+        {console.log(this.props.rows)}
         {this.generateTable(this.props.headers, this.props.rows)}
       </table>
     );
