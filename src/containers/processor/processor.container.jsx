@@ -67,7 +67,7 @@ export default class Processor extends Component {
         //       member.character.spec.icon + '.jpg'
         //     }
         //   />
-        // </figure>
+        // </figure>,
         member.character.name,
         member.character.items
           ? member.character.items.averageItemLevel +
@@ -173,50 +173,55 @@ export default class Processor extends Component {
 
     return (
       <Animate to={'0.99'} from={'0.01'} attributeName="opacity" duration={500}>
-        <main className="content">
-          <section className="hero is-info is-fullheight">
-            <section className="hero-body">
-              <div className="container">
+        <section className="hero is-info is-fullheight">
+          <section className="hero-body">
+            <div className="container">
+              <div className="level">
+                <Link to="/">
+                  <button className="button is-link is-inverted is-outlined level-left">
+                    <i className="fas fa-chevron-left" />
+                    &nbsp;Back
+                  </button>
+                </Link>
+              </div>
+              <div className="section">
+                {this.state.status && (
+                  <span className="tag is-danger is-large">
+                    {this.state.status}
+                  </span>
+                )}
+              </div>
+              <h1 className="title is-3">
+                {'<'}
+                {this.state.guild}
+                {'>'} Guild Stats
+              </h1>
+              <div className="field">
                 <div className="level">
-                  <Link to="/">
-                    <button className="button is-link is-inverted is-outlined level-left">
-                      <i className="fas fa-chevron-left" />
-                      &nbsp;Back
+                  <input
+                    onInput={this.handleSearchInput}
+                    className="input is-info"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div className="level-right">
+                    <button
+                      onClick={this.updateCharacterDetails}
+                      className="button is-info is-inverted"
+                    >
+                      <i className="fas fa-cloud-download-alt" />
+                      &nbsp;Get Details
                     </button>
-                  </Link>
-                </div>
-                <h1 className="title is-3">
-                  {'<'}
-                  {this.state.guild}
-                  {'>'} Guild Stats
-                </h1>
-                <div className="field">
-                  <div className="level">
-                    <input
-                      onInput={this.handleSearchInput}
-                      className="input is-info"
-                      type="text"
-                      placeholder="Search"
-                    />
-                    <div className="level-right">
-                      <button
-                        onClick={this.updateCharacterDetails}
-                        className="button is-info is-inverted"
-                      >
-                        <i className="fas fa-cloud-download-alt" />
-                        &nbsp;Get Details
-                      </button>
-                    </div>
                   </div>
                 </div>
-                <TableGenerator
-                  headers={['#', '', 'class/spec', nameHeader, itemLevelHeader]}
-                  rows={this.generateRows(this.state.filteredMembers)}
-                />
               </div>
-            </section>
+              <TableGenerator
+                headers={['#', '', 'class/spec', nameHeader, itemLevelHeader]}
+                rows={this.generateRows(this.state.filteredMembers)}
+              />
+            </div>
           </section>
-        </main>
+        </section>
       </Animate>
     );
   }
