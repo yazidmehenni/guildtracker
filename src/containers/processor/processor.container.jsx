@@ -34,9 +34,6 @@ export default class Processor extends Component {
   updateCharacterDetails = async () => {
     const updatedMembers = _.map(this.state.filteredMembers, obj => {
       return this.getCharacterDetails(obj.character.name);
-      // console.log({ details });
-      // obj.character.audit = details.audit;
-      // obj.character.items = details.items;
     });
     const filteredMembers = await Promise.all(updatedMembers);
     this.setState({ filteredMembers: filteredMembers });
@@ -57,7 +54,10 @@ export default class Processor extends Component {
         </figure>,
         member.character.name,
         member.character.level,
-        member.character.items ? member.character.items.averageItemLevel : ''
+        member.character.items
+          ? member.character.items.averageItemLevel +
+            (' (' + member.character.items.averageItemLevelEquipped + ')')
+          : ''
       ];
     });
     return rows;
@@ -124,7 +124,6 @@ export default class Processor extends Component {
   };
 
   render() {
-    const portraitHeader = <span className="thead">Portrait</span>;
     const nameHeader = (
       <span className="thead" onClick={this.sortListByMember}>
         Name&nbsp;
@@ -140,6 +139,7 @@ export default class Processor extends Component {
     const itemLevelHeader = (
       <span className="thead" onClick={this.sortListByItemLevel}>
         iLevel&nbsp;
+        {'(equipped)'}
         <i className="fas fa-sort" />
       </span>
     );
@@ -148,7 +148,11 @@ export default class Processor extends Component {
         <section className="hero is-info is-fullheight">
           <section className="hero-body">
             <div className="container">
-              <h1 className="title is-3">{this.state.guild} Guild Stats</h1>
+              <h1 className="title is-3">
+                {'<'}
+                {this.state.guild}
+                {'>'} Guild Stats
+              </h1>
               <div className="field">
                 <div className="level">
                   <input
@@ -169,12 +173,7 @@ export default class Processor extends Component {
                 </div>
               </div>
               <TableGenerator
-                headers={[
-                  portraitHeader,
-                  nameHeader,
-                  levelHeader,
-                  itemLevelHeader
-                ]}
+                headers={['', nameHeader, levelHeader, itemLevelHeader]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>

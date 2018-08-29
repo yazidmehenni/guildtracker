@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 import { WOW_API, LOCALE, APIKEY } from './../env/env.js';
+import _ from 'lodash';
 
 //props: [your,table,headers], [[your,row,data],[4,2,3],[2,3,1]...]
 
 export default class Form extends Component {
   state = {
-    guildName: '',
-    realmName: '',
+    guildName: 'Baewatch',
+    realmName: "mal'ganis",
     formComplete: false,
     members: [],
     loading: false
@@ -49,10 +50,14 @@ export default class Form extends Component {
       formComplete = false;
       status = 'Invalid Guild Name or Realm';
     }
+    const filteredMembers = _.filter(
+      guildRoster.members,
+      obj => obj.character.level === 120
+    );
     this.setState({
       status: status,
       formComplete: formComplete,
-      members: guildRoster.members
+      members: filteredMembers
     });
     return true;
   };
@@ -69,10 +74,11 @@ export default class Form extends Component {
                   <h3 className="subtitle">Guild Name:</h3>
                   <input
                     name="guildName"
+                    defaultValue="Baewatch"
                     onChange={this.handleInputChange}
                     className="input is-light"
                     type="text"
-                    placeholder="Primary input"
+                    placeholder="Guild Name"
                   />
                 </div>
               </div>
@@ -81,10 +87,11 @@ export default class Form extends Component {
                   <h3 className="subtitle">Realm:</h3>
                   <input
                     name="realmName"
+                    defaultValue="mal'ganis"
                     onChange={this.handleInputChange}
                     className="input is-light"
                     type="text"
-                    placeholder="Primary input"
+                    placeholder="Realm Name"
                   />
                 </div>
               </div>
