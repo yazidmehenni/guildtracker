@@ -68,7 +68,6 @@ export default class Processor extends Component {
         //   />
         // </figure>
         member.character.name,
-        member.character.level,
         member.character.items
           ? member.character.items.averageItemLevel +
             (' (' + member.character.items.averageItemLevelEquipped + ')')
@@ -92,23 +91,6 @@ export default class Processor extends Component {
         orderBy
       ),
       memberOrder: !this.state.memberOrder
-    });
-  };
-
-  sortListByLevel = () => {
-    const orderBy = this.state.levelOrder ? 'desc' : 'asc';
-    this.setState({
-      filteredMembers: _.orderBy(
-        this.state.filteredMembers,
-        obj => obj.character.level,
-        orderBy
-      ),
-      members: _.orderBy(
-        this.state.members,
-        obj => obj.character.level,
-        orderBy
-      ),
-      levelOrder: !this.state.levelOrder
     });
   };
 
@@ -180,12 +162,6 @@ export default class Processor extends Component {
         <i className="fas fa-sort" />
       </span>
     );
-    const levelHeader = (
-      <span className="thead" onClick={this.sortListByLevel}>
-        Level&nbsp;
-        <i className="fas fa-sort" />
-      </span>
-    );
     const itemLevelHeader = (
       <span className="thead" onClick={this.sortListByItemLevel}>
         iLevel&nbsp;
@@ -201,7 +177,7 @@ export default class Processor extends Component {
             <div className="container">
               <div className="level">
                 <Link to="/">
-                  <button className="button level-left">
+                  <button className="button is-link is-inverted is-outlined level-left">
                     <i className="fas fa-chevron-left" />
                     &nbsp;Back
                   </button>
@@ -232,14 +208,7 @@ export default class Processor extends Component {
                 </div>
               </div>
               <TableGenerator
-                headers={[
-                  '#',
-                  '',
-                  'class/spec',
-                  nameHeader,
-                  levelHeader,
-                  itemLevelHeader
-                ]}
+                headers={['#', '', 'class/spec', nameHeader, itemLevelHeader]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>
