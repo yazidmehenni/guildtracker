@@ -48,13 +48,6 @@ export default class Form extends Component {
                     />
                   </div>
                 </div>
-                <div className="section">
-                  {this.state.status && (
-                    <span className="tag is-danger is-large">
-                      {this.state.status}
-                    </span>
-                  )}
-                </div>
                 <Link
                   to={`/results/${this.state.realmName}/${
                     this.state.guildName

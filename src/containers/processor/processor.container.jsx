@@ -10,8 +10,8 @@ export default class Processor extends Component {
   state = {
     guild: this.props.guildName,
     realm: this.props.realmName,
-    members: this.props.members,
-    filteredMembers: this.props.members,
+    members: [],
+    filteredMembers: [],
     memberOrder: false,
     levelOrder: false,
     itemLevelOrder: false
