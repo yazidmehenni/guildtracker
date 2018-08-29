@@ -3,6 +3,8 @@ import qs from 'qs';
 import { WOW_API, LOCALE, APIKEY } from '../../env/env.js';
 import TableGenerator from '../../components/tablegenerator.component.jsx';
 import _ from 'lodash';
+import { Link } from 'react-router-dom';
+
 export default class Processor extends Component {
   state = {
     guild: this.props.guildName,
@@ -136,6 +138,41 @@ export default class Processor extends Component {
     });
   };
 
+  getRoster = async () => {
+    const params = qs.stringify({
+      locale: LOCALE,
+      apikey: APIKEY,
+      fields: 'members'
+    });
+    const requestString = `${WOW_API}/guild/${this.props.realmName}/${
+      this.props.guildName
+    }?${params}`;
+    const guildRoster = await (await fetch(requestString, {
+      method: 'GET'
+    })).json();
+    let formComplete = true;
+    let status = null;
+    if (guildRoster.status === 'nok') {
+      formComplete = false;
+      status = 'Invalid Guild Name or Realm';
+    }
+    const filteredMembers = _.filter(
+      guildRoster.members,
+      obj => obj.character.level === 120
+    );
+    this.setState({
+      status: status,
+      formComplete: formComplete,
+      members: filteredMembers,
+      filteredMembers: filteredMembers
+    });
+    return true;
+  };
+
+  componentDidMount() {
+    this.getRoster();
+  }
+
   render() {
     const nameHeader = (
       <span className="thead" onClick={this.sortListByMember}>
@@ -156,11 +193,20 @@ export default class Processor extends Component {
         <i className="fas fa-sort" />
       </span>
     );
+
     return (
       <main className="content">
         <section className="hero is-info is-fullheight">
           <section className="hero-body">
             <div className="container">
+              <div className="level">
+                <Link to="/">
+                  <button className="button level-left">
+                    <i className="fas fa-chevron-left" />
+                    &nbsp;Back
+                  </button>
+                </Link>
+              </div>
               <h1 className="title is-3">
                 {'<'}
                 {this.state.guild}

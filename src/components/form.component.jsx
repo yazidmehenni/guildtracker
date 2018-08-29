@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import qs from 'qs';
-import { WOW_API, LOCALE, APIKEY } from './../env/env.js';
-import _ from 'lodash';
-
-//props: [your,table,headers], [[your,row,data],[4,2,3],[2,3,1]...]
+import { Link } from 'react-router-dom';
 
 export default class Form extends Component {
   state = {
     guildName: 'Baewatch',
-    realmName: "mal'ganis",
-    formComplete: false,
-    members: [],
-    loading: false
+    realmName: "mal'ganis"
   };
 
   handleInputChange = event => {
@@ -19,47 +12,6 @@ export default class Form extends Component {
     const inputValue = event.target.value;
     const state = { [field]: inputValue };
     this.setState(state);
-  };
-
-  handleSubmit = async () => {
-    await this.getRoster();
-    const state = {
-      guildName: this.state.guildName,
-      realmName: this.state.realmName,
-      formComplete: this.state.formComplete,
-      members: this.state.members
-    };
-    this.props.appCallBack(state);
-  };
-
-  getRoster = async () => {
-    const params = qs.stringify({
-      locale: LOCALE,
-      apikey: APIKEY,
-      fields: 'members'
-    });
-    const requestString = `${WOW_API}/guild/${this.state.realmName}/${
-      this.state.guildName
-    }?${params}`;
-    const guildRoster = await (await fetch(requestString, {
-      method: 'GET'
-    })).json();
-    let formComplete = true;
-    let status = null;
-    if (guildRoster.status === 'nok') {
-      formComplete = false;
-      status = 'Invalid Guild Name or Realm';
-    }
-    const filteredMembers = _.filter(
-      guildRoster.members,
-      obj => obj.character.level === 120
-    );
-    this.setState({
-      status: status,
-      formComplete: formComplete,
-      members: filteredMembers
-    });
-    return true;
   };
 
   render() {
@@ -102,9 +54,11 @@ export default class Form extends Component {
                   </span>
                 )}
               </div>
-              <button className="button is-light" onClick={this.handleSubmit}>
-                Submit
-              </button>
+              <Link
+                to={`/results/${this.state.realmName}/${this.state.guildName}/`}
+              >
+                <button className="button is-light">Submit</button>
+              </Link>
             </div>
           </main>
         </section>
