@@ -40,7 +40,7 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
             <Route
-              exact={true}
+              exact={false}
               path="/results/:realmName/:guildName"
               render={this.renderProcessor}
             />
