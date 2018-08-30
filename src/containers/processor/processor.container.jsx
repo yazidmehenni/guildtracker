@@ -39,6 +39,7 @@ export default class Processor extends Component {
       return this.getCharacterDetails(obj.character.name);
     });
     const filteredMembers = await Promise.all(updatedMembers);
+    console.log(filteredMembers);
     this.setState({ filteredMembers: filteredMembers });
   };
 
@@ -70,6 +71,7 @@ export default class Processor extends Component {
             }
           />
         </figure>,
+        member.character.spec.role,
         member.character.items
           ? member.character.items.averageItemLevel +
             (' (' + member.character.items.averageItemLevelEquipped + ')')
@@ -223,7 +225,7 @@ export default class Processor extends Component {
                 </div>
               </div>
               <TableGenerator
-                headers={['#', '', nameHeader, 'Spec', itemLevelHeader]}
+                headers={['#', '', nameHeader, 'Spec', 'Role', itemLevelHeader]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>
