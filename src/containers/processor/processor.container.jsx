@@ -177,7 +177,7 @@ export default class Processor extends Component {
           <section className="hero-body">
             <div className="container">
               <div className="level">
-                <Link to="/">
+                <Link to={process.env.PUBLIC_URL + '/'}>
                   <button className="button is-link is-inverted is-outlined level-left">
                     <i className="fas fa-chevron-left" />
                     &nbsp;Back
