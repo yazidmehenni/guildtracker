@@ -41,10 +41,14 @@ class App extends Component {
           <Switch>
             <Route
               exact={false}
-              path="results/:realmName/:guildName"
+              path={process.env.PUBLIC_URL + '*/results/:realmName/:guildName'}
               render={this.renderProcessor}
             />
-            <Route exact={false} path="/" render={this.renderForm} />
+            <Route
+              exact={false}
+              path={process.env.PUBLIC_URL + '*/'}
+              render={this.renderForm}
+            />
           </Switch>
         </BrowserRouter>
       </div>
