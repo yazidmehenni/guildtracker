@@ -43,11 +43,12 @@ export default class Processor extends Component {
   };
 
   generateRows = members => {
+    console.log(members);
     const rows = members.map((member, i) => {
-      // console.log(member.character.spec.icon);
+      if (!member.character.spec) return;
       return [
         i + 1,
-        <figure className="image is-64x64">
+        <figure className="image is-32x32">
           <img
             className="is-rounded"
             alt={'character portrait for ' + member.character.name}
@@ -57,18 +58,18 @@ export default class Processor extends Component {
             }
           />
         </figure>,
-        '',
-        //   <figure className="image is-64x64">
-        //   <img
-        //     className="is-rounded"
-        //     alt={'character portrait for ' + member.character.name}
-        //     src={
-        //       'https://render-us.worldofwarcraft.com/icons/56/' +
-        //       member.character.spec.icon + '.jpg'
-        //     }
-        //   />
-        // </figure>,
         member.character.name,
+        <figure className="image is-32x32">
+          <img
+            className="is-rounded"
+            alt={'character portrait for ' + member.character.name}
+            src={
+              'https://render-us.worldofwarcraft.com/icons/56/' +
+              _.get(member, 'character.spec.icon') +
+              '.jpg'
+            }
+          />
+        </figure>,
         member.character.items
           ? member.character.items.averageItemLevel +
             (' (' + member.character.items.averageItemLevelEquipped + ')')
@@ -222,7 +223,7 @@ export default class Processor extends Component {
                 </div>
               </div>
               <TableGenerator
-                headers={['#', '', 'class/spec', nameHeader, itemLevelHeader]}
+                headers={['#', '', nameHeader, 'Spec', itemLevelHeader]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>

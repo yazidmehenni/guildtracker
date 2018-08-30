@@ -27,7 +27,7 @@ export default class TableGenerator extends Component {
     return rows.map((row, i) => {
       return (
         <tr className="tr" key={i}>
-          {this.markupIndividualRows(row)}
+          {row && this.markupIndividualRows(row)}
         </tr>
       );
     });
