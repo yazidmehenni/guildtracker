@@ -14,6 +14,7 @@ export default class Processor extends Component {
     filteredMembers: [],
     memberOrder: false,
     levelOrder: false,
+    rankOrder: false,
     itemLevelOrder: false
   };
 
@@ -121,6 +122,19 @@ export default class Processor extends Component {
     });
   };
 
+  sortListByRank = () => {
+    const orderBy = this.state.rankOrder ? 'desc' : 'asc';
+    this.setState({
+      filteredMembers: _.orderBy(
+        this.state.filteredMembers,
+        obj => obj.rank,
+        orderBy
+      ),
+      members: _.orderBy(this.state.members, obj => obj.rank, orderBy),
+      rankOrder: !this.state.rankOrder
+    });
+  };
+
   handleSearchInput = event => {
     const searchValue = event.target.value.toLowerCase();
     this.setState({
@@ -188,6 +202,12 @@ export default class Processor extends Component {
         <i className="fas fa-sort" />
       </span>
     );
+    const rankHeader = (
+      <span className="thead" onClick={this.sortListByRank}>
+        Rank
+        <i className="fas fa-sort" />
+      </span>
+    );
 
     return (
       <Animate to={'0.99'} from={'0.01'} attributeName="opacity" duration={500}>
@@ -237,7 +257,7 @@ export default class Processor extends Component {
                 headers={[
                   '#',
                   '',
-                  'Rank',
+                  rankHeader,
                   nameHeader,
                   'Spec',
                   'Role',
