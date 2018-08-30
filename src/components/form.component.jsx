@@ -49,9 +49,9 @@ export default class Form extends Component {
                   </div>
                 </div>
                 <Link
-                  to={`/results/${this.state.realmName}/${
-                    this.state.guildName
-                  }/`}
+                  to={`${process.env.PUBLIC_URL}/results/${
+                    this.state.realmName
+                  }/${this.state.guildName}/`}
                 >
                   <button className="button is-light">Submit</button>
                 </Link>
