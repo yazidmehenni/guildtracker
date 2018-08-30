@@ -122,6 +122,7 @@ export default class Processor extends Component {
   };
 
   getRoster = async () => {
+    //set up request string
     const params = qs.stringify({
       locale: LOCALE,
       apikey: APIKEY,
@@ -130,30 +131,35 @@ export default class Processor extends Component {
     const requestString = `${WOW_API}/guild/${this.props.realmName}/${
       this.props.guildName
     }?${params}`;
-    const guildRoster = await (await fetch(requestString, {
+    //get response
+    const response = await fetch(requestString, {
       method: 'GET'
-    })).json();
+    });
+    const guildRoster = await response.json();
+    //error handling
     let formComplete = true;
     let status = null;
     if (guildRoster.status === 'nok') {
       formComplete = false;
       status = 'Invalid Guild Name or Realm';
     }
+    //filter response
     const filteredMembers = _.filter(
       guildRoster.members,
       obj => obj.character.level === 120
     );
+    //update state
     this.setState({
       status: status,
       formComplete: formComplete,
       members: filteredMembers,
       filteredMembers: filteredMembers
     });
-    return true;
+    return guildRoster.members;
   };
 
-  componentDidMount() {
-    this.getRoster();
+  async componentDidMount() {
+    await this.getRoster();
   }
 
   render() {
