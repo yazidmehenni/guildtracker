@@ -67,6 +67,7 @@ export default class Processor extends Component {
             }
           />
         </figure>,
+        member.rank === 0 ? 'Guild Master' : 'Rank ' + member.rank,
         member.character.name,
         <figure className="image is-32x32">
           <img
@@ -233,7 +234,15 @@ export default class Processor extends Component {
                 </div>
               </div>
               <TableGenerator
-                headers={['#', '', nameHeader, 'Spec', 'Role', itemLevelHeader]}
+                headers={[
+                  '#',
+                  '',
+                  'Rank',
+                  nameHeader,
+                  'Spec',
+                  'Role',
+                  itemLevelHeader
+                ]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
             </div>
