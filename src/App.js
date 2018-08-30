@@ -37,6 +37,7 @@ class App extends Component {
           integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
           crossOrigin="anonymous"
         />
+        {console.log(process.env.PUBLIC_URL)}
         <BrowserRouter>
           <Switch>
             <Route
