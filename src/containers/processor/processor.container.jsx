@@ -19,6 +19,7 @@ export default class Processor extends Component {
 
   getCharacterDetails = async character => {
     // get character audit, items
+    //set up query string
     const params = qs.stringify({
       locale: LOCALE,
       apikey: APIKEY,
@@ -27,11 +28,20 @@ export default class Processor extends Component {
     const requestString = `${WOW_API}/character/${
       this.state.realm
     }/${character}?${params}`;
-    const characterDetails = await (await fetch(requestString, {
+    //await fetch
+    const response = await fetch(requestString, {
       method: 'GET'
-    })).json();
-    const nestedCharacter = { character: characterDetails };
-    return nestedCharacter;
+    });
+    const characterDetails = await response.json();
+    //find correct old character object
+    const oldCharacter = _.find(
+      this.state.filteredMembers,
+      obj => obj.character.name === character
+    );
+    //update the old object with new details
+    oldCharacter.character.audit = characterDetails.audit;
+    oldCharacter.character.items = characterDetails.items;
+    return oldCharacter;
   };
 
   updateCharacterDetails = async () => {
@@ -39,12 +49,10 @@ export default class Processor extends Component {
       return this.getCharacterDetails(obj.character.name);
     });
     const filteredMembers = await Promise.all(updatedMembers);
-    console.log(filteredMembers);
     this.setState({ filteredMembers: filteredMembers });
   };
 
   generateRows = members => {
-    console.log(members);
     const rows = members.map((member, i) => {
       if (!member.character.spec) return;
       return [
