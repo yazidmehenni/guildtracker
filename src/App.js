@@ -41,10 +41,10 @@ class App extends Component {
           <Switch>
             <Route
               exact={false}
-              path="*/results/:realmName/:guildName"
+              path="results/:realmName/:guildName"
               render={this.renderProcessor}
             />
-            <Route exact={false} path="*/" render={this.renderForm} />
+            <Route exact={false} path="/" render={this.renderForm} />
           </Switch>
         </BrowserRouter>
       </div>
