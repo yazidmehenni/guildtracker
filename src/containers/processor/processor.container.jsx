@@ -340,28 +340,28 @@ export default class Processor extends Component {
     );
     const itemLevelHeader = (
       <span className="thead" onClick={this.sortListByItemLevel}>
-        iLevel&nbsp;
-        {'(equipped)'}
+        {'iLevel(equipped)'}
+        &nbsp;
         <i className="fas fa-sort" />
       </span>
     );
     const rankHeader = (
       <span className="thead" onClick={this.sortListByRank}>
-        Rank
+        Rank&nbsp;
         <i className="fas fa-sort" />
       </span>
     );
 
     const AzeriteLvlHeader = (
       <span className="thead" onClick={this.sortListByAzeriteLvl}>
-        AzeriteLvl
+        AzeriteLvl&nbsp;
         <i className="fas fa-sort" />
       </span>
     );
 
     const roleHeader = (
       <span className="thead" onClick={this.sortListByRole}>
-        Role
+        Role&nbsp;
         <i className="fas fa-sort" />
       </span>
     );
