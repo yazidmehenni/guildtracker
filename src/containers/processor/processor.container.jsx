@@ -330,9 +330,7 @@ export default class Processor extends Component {
                 )}
               </div>
               <h1 className="title is-3">
-                {'<'}
-                {this.state.guild}
-                {'>'} Guild Stats
+                {`<${this.state.guild}> Guild Stats`}
               </h1>
               <div className="field">
                 <div className="level">
