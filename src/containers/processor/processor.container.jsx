@@ -57,7 +57,9 @@ export default class Processor extends Component {
     const rows = members.map((member, i) => {
       if (!member.character.spec) return;
       return [
+        // NUMBER ROW
         i + 1,
+        //PORTRAIT ROW
         <figure className="image is-32x32">
           <img
             className="is-rounded"
@@ -68,8 +70,23 @@ export default class Processor extends Component {
             }
           />
         </figure>,
+        //RANK ROW
         member.rank === 0 ? 'Guild Master' : 'Rank ' + member.rank,
-        member.character.name,
+        //NAME ROW
+        <a
+          href={`https://worldofwarcraft.com/en-us/character/${this.state.realm.replace(
+            /\W/g,
+            ''
+          )}/${member.character.name}`}
+          target="_blank"
+        >
+          {member.character.name}
+          &nbsp;
+          <span className="icon has-text-info">
+            <i className="fas fa-link" />
+          </span>
+        </a>,
+        //SPEC ROW
         <figure className="image is-32x32">
           <img
             className="is-rounded"
@@ -81,16 +98,83 @@ export default class Processor extends Component {
             }
           />
         </figure>,
+        //ROLE ROW
         member.character.spec.role,
+        //ITEMLEVEL ROW
         member.character.items
           ? member.character.items.averageItemLevel +
             (' (' + member.character.items.averageItemLevelEquipped + ')')
           : '',
+        //AZERITE LEVEL ROW
         member.character.items
           ? member.character.items.neck.azeriteItem.azeriteLevel
           : '',
+        //GEM ROW
         member.character.audit ? (
           member.character.audit.emptySockets === 0 ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )
+        ) : (
+          ''
+        ),
+        //MH ROW
+        member.character.items ? (
+          member.character.items.mainHand.tooltipParams.enchant ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )
+        ) : (
+          ''
+        ),
+        //OH ROW
+        member.character.items ? (
+          member.character.items.offHand ? (
+            member.character.items.offHand.tooltipParams.enchant ? (
+              <span className="icon has-text-success">
+                <i className="fas fa-check-circle" />
+              </span>
+            ) : member.character.audit.unenchantedItems['16'] &&
+            member.character.class !== 2 ? (
+              <span className="icon has-text-danger">
+                <i className="fas fa-times-circle" />
+              </span>
+            ) : (
+              ''
+            )
+          ) : (
+            ''
+          )
+        ) : (
+          ''
+        ),
+        //RING1 ROW
+        member.character.items ? (
+          member.character.items.finger1.tooltipParams.enchant ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )
+        ) : (
+          ''
+        ),
+        //RING2 ROW
+        member.character.items ? (
+          member.character.items.finger2.tooltipParams.enchant ? (
             <span className="icon has-text-success">
               <i className="fas fa-check-circle" />
             </span>
