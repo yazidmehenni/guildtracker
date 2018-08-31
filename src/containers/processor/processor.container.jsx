@@ -15,7 +15,9 @@ export default class Processor extends Component {
     memberOrder: false,
     levelOrder: false,
     rankOrder: false,
-    itemLevelOrder: false
+    itemLevelOrder: false,
+    AzeriteLvlOrder: false,
+    roleOrder: false
   };
 
   getCharacterDetails = async character => {
@@ -218,7 +220,29 @@ export default class Processor extends Component {
         obj => obj.character.items.averageItemLevel,
         orderBy
       ),
+      members: _.orderBy(
+        this.state.filteredMembers,
+        obj => obj.character.items.averageItemLevel,
+        orderBy
+      ),
       itemLevelOrder: !this.state.itemLevelOrder
+    });
+  };
+
+  sortListByRole = () => {
+    const orderBy = this.state.roleOrder ? 'desc' : 'asc';
+    this.setState({
+      filteredMembers: _.orderBy(
+        this.state.filteredMembers,
+        obj => _.get(obj, 'character.spec.role'),
+        orderBy
+      ),
+      members: _.orderBy(
+        this.state.filteredMembers,
+        obj => _.get(obj, 'character.spec.role'),
+        orderBy
+      ),
+      roleOrder: !this.state.roleOrder
     });
   };
 
@@ -232,6 +256,25 @@ export default class Processor extends Component {
       ),
       members: _.orderBy(this.state.members, obj => obj.rank, orderBy),
       rankOrder: !this.state.rankOrder
+    });
+  };
+
+  sortListByAzeriteLvl = () => {
+    if (!this.state.filteredMembers[0]) return;
+    if (!this.state.filteredMembers[0].character.items) return;
+    const orderBy = this.state.azeriteLvlOrder ? 'desc' : 'asc';
+    this.setState({
+      filteredMembers: _.orderBy(
+        this.state.filteredMembers,
+        obj => obj.character.items.neck.azeriteItem.azeriteLevel,
+        orderBy
+      ),
+      members: _.orderBy(
+        this.state.members,
+        obj => obj.character.items.neck.azeriteItem.azeriteLevel,
+        orderBy
+      ),
+      azeriteLvlOrder: !this.state.azeriteLvlOrder
     });
   };
 
@@ -309,6 +352,20 @@ export default class Processor extends Component {
       </span>
     );
 
+    const AzeriteLvlHeader = (
+      <span className="thead" onClick={this.sortListByAzeriteLvl}>
+        AzeriteLvl
+        <i className="fas fa-sort" />
+      </span>
+    );
+
+    const roleHeader = (
+      <span className="thead" onClick={this.sortListByRole}>
+        Role
+        <i className="fas fa-sort" />
+      </span>
+    );
+
     return (
       <Animate to={'0.99'} from={'0.01'} attributeName="opacity" duration={500}>
         <section className="hero is-info is-fullheight">
@@ -358,9 +415,9 @@ export default class Processor extends Component {
                   rankHeader,
                   nameHeader,
                   'Spec',
-                  'Role',
+                  roleHeader,
                   itemLevelHeader,
-                  'AzeriteLvl',
+                  AzeriteLvlHeader,
                   'Gems',
                   'MH',
                   'OH',
