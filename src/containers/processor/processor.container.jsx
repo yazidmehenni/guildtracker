@@ -85,7 +85,23 @@ export default class Processor extends Component {
         member.character.items
           ? member.character.items.averageItemLevel +
             (' (' + member.character.items.averageItemLevelEquipped + ')')
-          : ''
+          : '',
+        member.character.items
+          ? member.character.items.neck.azeriteItem.azeriteLevel
+          : '',
+        member.character.audit ? (
+          member.character.audit.emptySockets === 0 ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )
+        ) : (
+          ''
+        )
       ];
     });
     return rows;
@@ -261,7 +277,13 @@ export default class Processor extends Component {
                   nameHeader,
                   'Spec',
                   'Role',
-                  itemLevelHeader
+                  itemLevelHeader,
+                  'AzeriteLvl',
+                  'Gems',
+                  'MH',
+                  'OH',
+                  'Ring1',
+                  'Ring2'
                 ]}
                 rows={this.generateRows(this.state.filteredMembers)}
               />
