@@ -432,7 +432,7 @@ export default class Processor extends Component {
                   </button>
                 </div>
               </div>
-              <div className="section">
+              <div className="section centerContainer">
                 {this.state.status && (
                   <span className="tag is-danger is-large">
                     {this.state.status}
