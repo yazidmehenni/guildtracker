@@ -1,19 +1,17 @@
 const qs = require('qs');
 const fetch = require('node-fetch');
 const _ = require('lodash');
-const WOW_API = 'https://us.api.battle.net/wow';
-const LOCALE = 'en_US';
-const APIKEY = 'akyqx3jzzdm47a66s2pdcrkshf3cspjf';
 const { URL } = require('url');
+const env = require('./../env/env.js');
 
 getRoster = async (guild, realm) => {
   //set up request string
   const params = qs.stringify({
-    locale: LOCALE,
-    apikey: APIKEY,
+    locale: env.LOCALE,
+    apikey: env.APIKEY,
     fields: 'members'
   });
-  const requestString = `${WOW_API}/guild/${realm}/${guild}?${params}`;
+  const requestString = `${env.WOW_API}/guild/${realm}/${guild}?${params}`;
   //get response
   const response = await fetch(requestString, {
     method: 'GET'
@@ -50,11 +48,13 @@ getCharacterDetails = async (character, realm, filteredMembers) => {
   //set up query string
   try {
     const params = qs.stringify({
-      locale: LOCALE,
-      apikey: APIKEY,
+      locale: env.LOCALE,
+      apikey: env.APIKEY,
       fields: 'items,audit'
     });
-    const requestString = `${WOW_API}/character/${realm}/${character}?${params}`;
+    const requestString = `${
+      env.WOW_API
+    }/character/${realm}/${character}?${params}`;
     //await fetch
     const response = await fetch(new URL(requestString), {
       method: 'GET'
