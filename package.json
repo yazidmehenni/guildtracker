@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "lodash": "^4.17.10",
+    "now": "^11.4.1",
+    "now-serve": "^0.5.1",
     "qs": "^6.5.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
@@ -17,7 +19,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "npm run build && ns build"
   },
   "devDependencies": {
     "gh-pages": "^1.2.0"
