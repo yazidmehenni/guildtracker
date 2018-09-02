@@ -386,6 +386,15 @@ export default class Processor extends Component {
                     &nbsp;Back
                   </button>
                 </Link>
+                <div className="customLevel">
+                  <button
+                    onClick={this.updateCharacterDetails}
+                    className="button is-info is-inverted is-outlined level-item"
+                  >
+                    <i className="fas fa-cloud-download-alt" />
+                    &nbsp;Get Details
+                  </button>
+                </div>
               </div>
               <div className="section">
                 {this.state.status && (
@@ -397,16 +406,6 @@ export default class Processor extends Component {
               <h1 className="title is-3 level-center">
                 {`<${this.state.guild}> Guild Stats`}
               </h1>
-
-              <div className="customLevel">
-                <button
-                  onClick={this.updateCharacterDetails}
-                  className="button is-info is-inverted level-item"
-                >
-                  <i className="fas fa-cloud-download-alt" />
-                  &nbsp;Get Details
-                </button>
-              </div>
 
               <div className="field">
                 <input
