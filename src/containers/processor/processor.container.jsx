@@ -394,46 +394,47 @@ export default class Processor extends Component {
                   </span>
                 )}
               </div>
-              <h1 className="title is-3">
-                {`<${this.state.guild}> Guild Stats`}
-              </h1>
-              <div className="field">
-                <div className="level">
-                  <input
-                    onInput={this.handleSearchInput}
-                    className="input is-info"
-                    type="text"
-                    placeholder="Search"
-                  />
-                  <div className="level-right">
-                    <button
-                      onClick={this.updateCharacterDetails}
-                      className="button is-info is-inverted"
-                    >
-                      <i className="fas fa-cloud-download-alt" />
-                      &nbsp;Get Details
-                    </button>
-                  </div>
-                </div>
+
+              <div className="level is-mobile">
+                <h1 className="title is-3 level-center">
+                  {`<${this.state.guild}> Guild Stats`}
+                </h1>
+                <button
+                  onClick={this.updateCharacterDetails}
+                  className="button is-info is-inverted level-right"
+                >
+                  <i className="fas fa-cloud-download-alt" />
+                  &nbsp;Get Details
+                </button>
               </div>
-              <TableGenerator
-                headers={[
-                  '#',
-                  '',
-                  rankHeader,
-                  nameHeader,
-                  'Spec',
-                  roleHeader,
-                  itemLevelHeader,
-                  AzeriteLvlHeader,
-                  'Gems',
-                  'MH',
-                  'OH',
-                  'Ring1',
-                  'Ring2'
-                ]}
-                rows={this.generateRows(this.state.filteredMembers)}
-              />
+              <div className="field">
+                <input
+                  onInput={this.handleSearchInput}
+                  className="input is-info"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+              <div className="box">
+                <TableGenerator
+                  headers={[
+                    '#',
+                    '',
+                    rankHeader,
+                    nameHeader,
+                    'Spec',
+                    roleHeader,
+                    itemLevelHeader,
+                    AzeriteLvlHeader,
+                    'Gems',
+                    'MH',
+                    'OH',
+                    'Ring1',
+                    'Ring2'
+                  ]}
+                  rows={this.generateRows(this.state.filteredMembers)}
+                />
+              </div>
             </div>
           </section>
         </section>
