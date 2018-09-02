@@ -83,19 +83,43 @@ export default class Processor extends Component {
         //RANK ROW
         member.rank === 0 ? 'Guild Master' : 'Rank ' + member.rank,
         //NAME ROW
-        <a
-          href={`https://worldofwarcraft.com/en-us/character/${this.state.realm.replace(
-            /\W/g,
-            ''
-          )}/${member.character.name}`}
-          target="_blank"
-        >
-          {member.character.name}
-          &nbsp;
-          <span className="icon has-text-info">
-            <i className="fas fa-link" />
-          </span>
-        </a>,
+        <span>
+          <a
+            href={`https://worldofwarcraft.com/en-us/character/${this.state.realm.replace(
+              /\W/g,
+              ''
+            )}/${member.character.name}`}
+            target="_blank"
+          >
+            {member.character.name}
+            &nbsp;
+            <span className="icon has-text-info">
+              <img className="image is-16x16" src="/wow.png" />
+            </span>
+          </a>
+          <a
+            href={`https://www.warcraftlogs.com/character/us/${this.state.realm.replace(
+              /\W/g,
+              ''
+            )}/${member.character.name}`}
+            target="_blank"
+          >
+            <span className="icon has-text-info">
+              <img className="image is-16x16" src="/logs.png" />
+            </span>
+          </a>
+          <a
+            href={`https://raider.io/characters/us/${this.state.realm.replace(
+              /\W/g,
+              ''
+            )}/${member.character.name}`}
+            target="_blank"
+          >
+            <span className="icon has-text-info">
+              <img className="image is-16x16" src="/raider.png" />
+            </span>
+          </a>
+        </span>,
         //SPEC ROW
         <figure className="image is-32x32">
           <img
