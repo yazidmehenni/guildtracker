@@ -36,7 +36,7 @@ export default class TableGenerator extends Component {
   generateTable = (headers, rows) => {
     return (
       <table className="table is-fullwidth">
-        {this.markupHeaders(headers)}
+        <thead className="thead">{this.markupHeaders(headers)}</thead>
         <tbody className="tbody">{this.markupAllRows(rows)}</tbody>
       </table>
     );
