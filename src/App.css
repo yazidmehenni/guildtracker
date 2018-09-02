@@ -1,7 +1,27 @@
-th {
+body{
+  font-size: 1.3em;
+}
+
+th,td {
   white-space: nowrap;
 }
 
 .tableContainer {
   overflow-x: auto;
+  border-radius: 4px;
+}
+
+.customContainer{
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.title{
+  text-align: center;
+}
+
+.customLevel{
+  float: right;
+  margin-bottom: 11px;
+  margin-right: 1px;
 }

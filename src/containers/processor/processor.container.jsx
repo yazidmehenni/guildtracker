@@ -378,7 +378,7 @@ export default class Processor extends Component {
       <Animate to={'0.99'} from={'0.01'} attributeName="opacity" duration={500}>
         <section className="hero is-info is-fullheight">
           <section className="hero-body">
-            <div className="container">
+            <div className="customContainer">
               <div className="level">
                 <Link to={process.env.PUBLIC_URL + '/'}>
                   <button className="button is-link is-inverted is-outlined level-left">
@@ -394,19 +394,20 @@ export default class Processor extends Component {
                   </span>
                 )}
               </div>
+              <h1 className="title is-3 level-center">
+                {`<${this.state.guild}> Guild Stats`}
+              </h1>
 
-              <div className="level is-mobile">
-                <h1 className="title is-3 level-center">
-                  {`<${this.state.guild}> Guild Stats`}
-                </h1>
+              <div className="customLevel">
                 <button
                   onClick={this.updateCharacterDetails}
-                  className="button is-info is-inverted level-right"
+                  className="button is-info is-inverted level-item"
                 >
                   <i className="fas fa-cloud-download-alt" />
                   &nbsp;Get Details
                 </button>
               </div>
+
               <div className="field">
                 <input
                   onInput={this.handleSearchInput}
@@ -415,26 +416,25 @@ export default class Processor extends Component {
                   placeholder="Search"
                 />
               </div>
-              <div className="box">
-                <TableGenerator
-                  headers={[
-                    '#',
-                    '',
-                    rankHeader,
-                    nameHeader,
-                    'Spec',
-                    roleHeader,
-                    itemLevelHeader,
-                    AzeriteLvlHeader,
-                    'Gems',
-                    'MH',
-                    'OH',
-                    'Ring1',
-                    'Ring2'
-                  ]}
-                  rows={this.generateRows(this.state.filteredMembers)}
-                />
-              </div>
+
+              <TableGenerator
+                headers={[
+                  '#',
+                  '',
+                  rankHeader,
+                  nameHeader,
+                  'Spec',
+                  roleHeader,
+                  itemLevelHeader,
+                  AzeriteLvlHeader,
+                  'Gems',
+                  'MH',
+                  'OH',
+                  'Ring1',
+                  'Ring2'
+                ]}
+                rows={this.generateRows(this.state.filteredMembers)}
+              />
             </div>
           </section>
         </section>
