@@ -94,7 +94,11 @@ export default class Processor extends Component {
             {member.character.name}
             &nbsp;
             <span className="icon has-text-info">
-              <img className="image is-16x16" src="/wow.png" />
+              <img
+                className="image is-16x16"
+                alt="world of warcraft logo"
+                src="/wow.png"
+              />
             </span>
           </a>
           <a
@@ -105,7 +109,11 @@ export default class Processor extends Component {
             target="_blank"
           >
             <span className="icon has-text-info">
-              <img className="image is-16x16" src="/logs.png" />
+              <img
+                className="image is-16x16"
+                alt="warcraft logs logo"
+                src="/logs.png"
+              />
             </span>
           </a>
           <a
@@ -116,7 +124,11 @@ export default class Processor extends Component {
             target="_blank"
           >
             <span className="icon has-text-info">
-              <img className="image is-16x16" src="/raider.png" />
+              <img
+                className="image is-16x16"
+                alt="raider io logo"
+                src="/raider.png"
+              />
             </span>
           </a>
         </span>,
