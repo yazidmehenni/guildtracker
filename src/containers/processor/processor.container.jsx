@@ -23,33 +23,41 @@ export default class Processor extends Component {
   getCharacterDetails = async character => {
     // get character audit, items
     //set up query string
-    const params = qs.stringify({
-      locale: LOCALE,
-      apikey: APIKEY,
-      fields: 'items,audit'
-    });
-    const requestString = `${WOW_API}/character/${
-      this.state.realm
-    }/${character}?${params}`;
-    //await fetch
-    const response = await fetch(requestString, {
-      method: 'GET'
-    });
-    const characterDetails = await response.json();
-    //find correct old character object
-    const oldCharacter = _.find(
-      this.state.filteredMembers,
-      obj => obj.character.name === character
-    );
-    //update the old object with new details
-    oldCharacter.character.audit = characterDetails.audit;
-    oldCharacter.character.items = characterDetails.items;
-    return oldCharacter;
+    try {
+      const params = qs.stringify({
+        locale: LOCALE,
+        apikey: APIKEY,
+        fields: 'items,audit'
+      });
+      const requestString = `${WOW_API}/character/${
+        this.state.realm
+      }/${character}?${params}`;
+      //await fetch
+      const response = await fetch(requestString, {
+        method: 'GET'
+      });
+      const characterDetails = await response.json();
+      //find correct old character object
+      const oldCharacter = _.find(
+        this.state.filteredMembers,
+        obj => obj.character.name === character
+      );
+      //update the old object with new details
+      oldCharacter.character.audit = characterDetails.audit;
+      oldCharacter.character.items = characterDetails.items;
+      return oldCharacter;
+    } catch (err) {
+      return character;
+    }
   };
 
   updateCharacterDetails = async () => {
     const updatedMembers = _.map(this.state.filteredMembers, obj => {
-      return this.getCharacterDetails(obj.character.name);
+      try {
+        return this.getCharacterDetails(obj.character.name);
+      } catch (err) {
+        return obj;
+      }
     });
     const filteredMembers = await Promise.all(updatedMembers);
     this.setState({ filteredMembers: filteredMembers });
@@ -57,7 +65,7 @@ export default class Processor extends Component {
 
   generateRows = members => {
     const rows = members.map((member, i) => {
-      if (!member.character.spec) return;
+      if (!_.get(member, 'character.spec')) return;
       return [
         // NUMBER ROW
         i + 1,
@@ -370,7 +378,7 @@ export default class Processor extends Component {
       <Animate to={'0.99'} from={'0.01'} attributeName="opacity" duration={500}>
         <section className="hero is-info is-fullheight">
           <section className="hero-body">
-            <div className="container">
+            <div className="customContainer">
               <div className="level">
                 <Link to={process.env.PUBLIC_URL + '/'}>
                   <button className="button is-link is-inverted is-outlined level-left">
@@ -378,6 +386,15 @@ export default class Processor extends Component {
                     &nbsp;Back
                   </button>
                 </Link>
+                <div className="customLevel">
+                  <button
+                    onClick={this.updateCharacterDetails}
+                    className="button is-info is-inverted is-outlined level-item"
+                  >
+                    <i className="fas fa-cloud-download-alt" />
+                    &nbsp;Get Details
+                  </button>
+                </div>
               </div>
               <div className="section">
                 {this.state.status && (
@@ -386,28 +403,19 @@ export default class Processor extends Component {
                   </span>
                 )}
               </div>
-              <h1 className="title is-3">
+              <h1 className="title is-3 level-center">
                 {`<${this.state.guild}> Guild Stats`}
               </h1>
+
               <div className="field">
-                <div className="level">
-                  <input
-                    onInput={this.handleSearchInput}
-                    className="input is-info"
-                    type="text"
-                    placeholder="Search"
-                  />
-                  <div className="level-right">
-                    <button
-                      onClick={this.updateCharacterDetails}
-                      className="button is-info is-inverted"
-                    >
-                      <i className="fas fa-cloud-download-alt" />
-                      &nbsp;Get Details
-                    </button>
-                  </div>
-                </div>
+                <input
+                  onInput={this.handleSearchInput}
+                  className="input is-info"
+                  type="text"
+                  placeholder="Search"
+                />
               </div>
+
               <TableGenerator
                 headers={[
                   '#',

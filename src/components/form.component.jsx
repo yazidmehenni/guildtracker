@@ -4,7 +4,7 @@ import Animate from 'react-smooth';
 export default class Form extends Component {
   state = {
     guildName: 'Baewatch',
-    realmName: "mal'ganis"
+    realmName: 'malganis'
   };
 
   handleInputChange = event => {
