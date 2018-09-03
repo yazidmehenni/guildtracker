@@ -8,11 +8,12 @@
     "express": "^4.16.3",
     "lodash": "^4.17.10",
     "node-fetch": "^2.2.0",
+    "nodemon": "^1.18.4",
     "qs": "^6.5.2",
     "whatwg-url": "^7.0.0"
   },
   "scripts": {
-    "dev": "node server.js"
+    "dev": "nodemon server.js"
   },
   "optionalDependencies": {
     "fsevents": "*"
