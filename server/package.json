@@ -13,7 +13,7 @@
     "whatwg-url": "^7.0.0"
   },
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "node server.js"
   },
   "optionalDependencies": {
     "fsevents": "*"
