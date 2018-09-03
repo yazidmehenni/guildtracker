@@ -2,7 +2,7 @@ const qs = require('qs');
 const fetch = require('node-fetch');
 const _ = require('lodash');
 const { URL } = require('url');
-const env = require('./../env/env.js');
+const env = require('./env/env.js');
 
 getRoster = async (guild, realm) => {
   //set up request string

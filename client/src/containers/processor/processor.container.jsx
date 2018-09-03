@@ -19,7 +19,7 @@ export default class Processor extends Component {
   };
 
   updateCharacterDetails = async () => {
-    const response = await fetch('http://localhost:4000/character', {
+    const response = await fetch('/character', {
       method: 'POST',
       body: JSON.stringify({
         filteredMembers: this.state.filteredMembers,
@@ -298,7 +298,7 @@ export default class Processor extends Component {
   };
 
   getRoster = async (guild, realm) => {
-    const queryString = `http://localhost:4000/guild?guild=${guild}&realm=${realm}`;
+    const queryString = `/guild?guild=${guild}&realm=${realm}`;
     const response = await fetch(queryString, { method: 'GET' });
     const parsedReponse = await response.json();
     const status = parsedReponse.status;
