@@ -1,6 +1,6 @@
 {
   "name": "guildtracker",
-  "proxy": "http://server:4000/",
+  "proxy": "http://server:4000",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,5 +20,5 @@
   "optionalDependencies": {
     "fsevents": "*"
   },
-  "homepage": "https://gameroller.com/"
+  "homepage": "."
 }
