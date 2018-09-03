@@ -29,4 +29,4 @@ services:
       - ./client/public:/client/public
     links:
       - server
-    command: npm start
+    #command: npm start
