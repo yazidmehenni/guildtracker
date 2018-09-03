@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import qs from 'qs';
-import { WOW_API, LOCALE, APIKEY } from '../../env/env.js';
 import TableGenerator from '../../components/tablegenerator.component.jsx';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
@@ -20,52 +18,21 @@ export default class Processor extends Component {
     roleOrder: false
   };
 
-  getCharacterDetails = async character => {
-    // get character audit, items
-    //set up query string
-    try {
-      const params = qs.stringify({
-        locale: LOCALE,
-        apikey: APIKEY,
-        fields: 'items,audit'
-      });
-      const requestString = `${WOW_API}/character/${
-        this.state.realm
-      }/${character}?${params}`;
-      //await fetch
-      const response = await fetch(requestString, {
-        method: 'GET'
-      });
-      const characterDetails = await response.json();
-      //find correct old character object
-      const oldCharacter = _.find(
-        this.state.filteredMembers,
-        obj => obj.character.name === character
-      );
-      //update the old object with new details
-      oldCharacter.character.audit = characterDetails.audit;
-      oldCharacter.character.items = characterDetails.items;
-      return oldCharacter;
-    } catch (err) {
-      return character;
-    }
-  };
-
   updateCharacterDetails = async () => {
-    const updatedMembers = _.map(this.state.filteredMembers, obj => {
-      try {
-        return this.getCharacterDetails(obj.character.name);
-      } catch (err) {
-        return obj;
-      }
+    const response = await fetch('/character', {
+      method: 'POST',
+      body: JSON.stringify({
+        filteredMembers: this.state.filteredMembers,
+        realm: this.state.realm
+      })
     });
-    const filteredMembers = await Promise.all(updatedMembers);
-    this.setState({ filteredMembers: filteredMembers });
+    const updatedMembers = await response.json();
+    this.setState({ filteredMembers: updatedMembers });
   };
 
   generateRows = members => {
     const rows = members.map((member, i) => {
-      if (!_.get(member, 'character.spec')) return;
+      if (!_.get(member, 'character.spec')) return undefined;
       return [
         // NUMBER ROW
         i + 1,
@@ -94,7 +61,11 @@ export default class Processor extends Component {
             {member.character.name}
             &nbsp;
             <span className="icon has-text-info">
-              <img className="image is-16x16" src="/wow.png" />
+              <img
+                className="image is-16x16"
+                alt="world of warcraft logo"
+                src="/wow.png"
+              />
             </span>
           </a>
           <a
@@ -105,7 +76,11 @@ export default class Processor extends Component {
             target="_blank"
           >
             <span className="icon has-text-info">
-              <img className="image is-16x16" src="/logs.png" />
+              <img
+                className="image is-16x16"
+                alt="warcraft logs logo"
+                src="/logs.png"
+              />
             </span>
           </a>
           <a
@@ -116,7 +91,11 @@ export default class Processor extends Component {
             target="_blank"
           >
             <span className="icon has-text-info">
-              <img className="image is-16x16" src="/raider.png" />
+              <img
+                className="image is-16x16"
+                alt="raider io logo"
+                src="/raider.png"
+              />
             </span>
           </a>
         </span>,
@@ -242,25 +221,6 @@ export default class Processor extends Component {
     });
   };
 
-  sortListByItemLevel = () => {
-    if (!this.state.filteredMembers[0]) return;
-    if (!this.state.filteredMembers[0].character.items) return;
-    const orderBy = this.state.itemLevelOrder ? 'desc' : 'asc';
-    this.setState({
-      filteredMembers: _.orderBy(
-        this.state.filteredMembers,
-        obj => obj.character.items.averageItemLevel,
-        orderBy
-      ),
-      members: _.orderBy(
-        this.state.filteredMembers,
-        obj => obj.character.items.averageItemLevel,
-        orderBy
-      ),
-      itemLevelOrder: !this.state.itemLevelOrder
-    });
-  };
-
   sortListByRole = () => {
     const orderBy = this.state.roleOrder ? 'desc' : 'asc';
     this.setState({
@@ -291,19 +251,34 @@ export default class Processor extends Component {
     });
   };
 
+  sortListByItemLevel = () => {
+    const orderBy = this.state.itemLevelOrder ? 'desc' : 'asc';
+    this.setState({
+      filteredMembers: _.orderBy(
+        this.state.filteredMembers,
+        obj => _.get(obj, 'character.items.averageItemLevel'),
+        orderBy
+      ),
+      members: _.orderBy(
+        this.state.filteredMembers,
+        obj => _.get(obj, 'character.items.averageItemLevel'),
+        orderBy
+      ),
+      itemLevelOrder: !this.state.itemLevelOrder
+    });
+  };
+
   sortListByAzeriteLvl = () => {
-    if (!this.state.filteredMembers[0]) return;
-    if (!this.state.filteredMembers[0].character.items) return;
     const orderBy = this.state.azeriteLvlOrder ? 'desc' : 'asc';
     this.setState({
       filteredMembers: _.orderBy(
         this.state.filteredMembers,
-        obj => obj.character.items.neck.azeriteItem.azeriteLevel,
+        obj => _.get(obj, 'character.items.neck.azeriteItem.azeriteLevel'),
         orderBy
       ),
       members: _.orderBy(
         this.state.members,
-        obj => obj.character.items.neck.azeriteItem.azeriteLevel,
+        obj => _.get(obj, 'character.items.neck.azeriteItem.azeriteLevel'),
         orderBy
       ),
       azeriteLvlOrder: !this.state.azeriteLvlOrder
@@ -322,45 +297,23 @@ export default class Processor extends Component {
     });
   };
 
-  getRoster = async () => {
-    //set up request string
-    const params = qs.stringify({
-      locale: LOCALE,
-      apikey: APIKEY,
-      fields: 'members'
-    });
-    const requestString = `${WOW_API}/guild/${this.props.realmName}/${
-      this.props.guildName
-    }?${params}`;
-    //get response
-    const response = await fetch(requestString, {
-      method: 'GET'
-    });
-    const guildRoster = await response.json();
-    //error handling
-    let formComplete = true;
-    let status = null;
-    if (guildRoster.status === 'nok') {
-      formComplete = false;
-      status = 'Invalid Guild Name or Realm';
-    }
-    //filter response
-    const filteredMembers = _.filter(
-      guildRoster.members,
-      obj => obj.character.level === 120
-    );
-    //update state
+  getRoster = async (guild, realm) => {
+    const queryString = `/guild?guild=${guild}&realm=${realm}`;
+    const response = await fetch(queryString, { method: 'GET' });
+    const parsedReponse = await response.json();
+    const status = parsedReponse.status;
+    const roster = parsedReponse.members;
+
     this.setState({
       status: status,
-      formComplete: formComplete,
-      members: filteredMembers,
-      filteredMembers: filteredMembers
+      members: roster,
+      filteredMembers: roster
     });
-    return guildRoster.members;
+    return roster;
   };
 
   async componentDidMount() {
-    await this.getRoster();
+    await this.getRoster(this.state.guild, this.state.realm);
   }
 
   render() {
@@ -420,7 +373,7 @@ export default class Processor extends Component {
                   </button>
                 </div>
               </div>
-              <div className="section">
+              <div className="section centerContainer">
                 {this.state.status && (
                   <span className="tag is-danger is-large">
                     {this.state.status}
