@@ -379,10 +379,10 @@ export default class Processor extends Component {
                     {this.state.status}
                   </span>
                 )}
+                <h1 className="title is-3 level-center">
+                  {`<${this.state.guild}> Guild Stats`}
+                </h1>
               </div>
-              <h1 className="title is-3 level-center">
-                {`<${this.state.guild}> Guild Stats`}
-              </h1>
 
               <div className="field">
                 <input
