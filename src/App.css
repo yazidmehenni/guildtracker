@@ -20,12 +20,18 @@ th,td {
   max-width: 100%;
 }
 
-.title{
-  text-align: center;
-}
-
 .customLevel{
   float: right;
   margin-bottom: 11px;
   margin-right: 1px;
+}
+
+/* LOGO CSS */
+
+
+.logo {
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -4px;
+  text-align: center;
 }

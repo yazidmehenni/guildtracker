@@ -21,7 +21,9 @@ export default class Form extends Component {
           <section className="hero is-dark is-fullheight">
             <main className="hero-body">
               <div className="container">
-                <h1 className="title"> Enter Guild Information</h1>
+                <h1 className="logo title is-1">
+                  <span className="threed">traqq.me</span>
+                </h1>
                 <div className="field">
                   <div className="control">
                     <h3 className="subtitle">Guild Name:</h3>
