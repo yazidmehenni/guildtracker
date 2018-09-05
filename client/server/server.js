@@ -1,25 +1,11 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const cors = require('cors');
-app.use(
-  cors()
-  //  {
-  //   origin: function(origin, callback) {
-  //     // allow requests with no origin
-  //     // (like mobile apps or curl requests)
-  //     if (!origin) return callback(null, true);
-  //     if (allowedOrigins.indexOf(origin) === -1) {
-  //       var msg =
-  //         'The CORS policy for this site does not ' +
-  //         'allow access from the specified Origin.';
-  //       return callback(new Error(msg), false);
-  //     }
-  //     return callback(null, true);
-  //   }
-  // })
-);
+const bodyParser = require('body-parser');
+const path = require('path');
+app.use(cors());
 app.use(bodyParser.raw({ type: '*/*', limit: '20mb' }));
+app.use(express.static(path.join(__dirname, '../build')));
 const api = require('./api.js');
 
 app.post('/character', async (req, res) => {
@@ -38,4 +24,10 @@ app.get('/guild', async (req, res) => {
   res.send(JSON.stringify(roster));
 });
 
-app.listen(4000, () => console.log('Listening on port 4000!'));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+});
+
+app.listen(process.env.PORT || 4000, () =>
+  console.log(`Listening on port ${process.env.PORT || 4000}`)
+);
