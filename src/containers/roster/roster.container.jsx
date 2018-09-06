@@ -116,15 +116,17 @@ const createMemberListing = (member, realm) => {
       <span className="media-right level">
         {' '}
         <figure className="image is-16x16">
-          <img
-            className="is-rounded"
-            alt={'character portrait for ' + member.character.name}
-            src={
-              'https://render-us.worldofwarcraft.com/icons/56/' +
-              _.get(member, 'character.spec.icon') +
-              '.jpg'
-            }
-          />
+          {_.get(member, 'character.spec.icon') && (
+            <img
+              className="is-rounded"
+              alt={'character portrait for ' + member.character.name}
+              src={
+                'https://render-us.worldofwarcraft.com/icons/56/' +
+                _.get(member, 'character.spec.icon') +
+                '.jpg'
+              }
+            />
+          )}
         </figure>
         &nbsp;
         {'Rank ' + member.rank}
