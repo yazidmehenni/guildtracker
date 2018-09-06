@@ -18,9 +18,11 @@ app.post('/character', async (req, res) => {
 });
 
 app.get('/guild', async (req, res) => {
+  console.log('getting guild');
   const guild = req.query.guild;
   const realm = req.query.realm;
   const roster = await api.getRoster(guild, realm);
+  console.log(roster);
   res.send(JSON.stringify(roster));
 });
 

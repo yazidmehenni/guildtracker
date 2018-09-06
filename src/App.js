@@ -3,6 +3,7 @@ import './App.css';
 import './bulma.css';
 import Processor from './containers/processor/processor.container.jsx';
 import Form from './components/form.component.jsx';
+import { Roster } from './containers/roster/roster.container.jsx';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 class App extends Component {
@@ -43,6 +44,11 @@ class App extends Component {
               exact={false}
               path={process.env.PUBLIC_URL + '*/results/:realmName/:guildName'}
               render={this.renderProcessor}
+            />
+            <Route
+              exact={false}
+              path={process.env.PUBLIC_URL + '*/roster'}
+              component={Roster}
             />
             <Route
               exact={false}

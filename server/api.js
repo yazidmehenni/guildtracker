@@ -6,6 +6,7 @@ const env = require('./env/env.js');
 
 getRoster = async (guild, realm) => {
   //set up request string
+  console.log('getting roster');
   const params = qs.stringify({
     locale: env.LOCALE,
     apikey: env.APIKEY,
@@ -17,10 +18,14 @@ getRoster = async (guild, realm) => {
     method: 'GET'
   });
   const guildRoster = await response.json();
+  console.log('response:', guildRoster);
   //error handling
   let status = null;
   if (guildRoster.status === 'nok') {
-    status = 'Invalid Guild Name or Realm';
+    status = `Blizzard API: ${guildRoster.reason}`;
+  }
+  if (guildRoster.code) {
+    status = `Blizzard API: ${guildRoster.type}`;
   }
   //filter response
   const filteredMembers = _.filter(
