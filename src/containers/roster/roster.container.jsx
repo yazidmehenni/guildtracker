@@ -2,56 +2,6 @@ import React, { Component } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import _ from 'lodash';
 
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-/**
- * Moves an item from one list to another list.
- */
-const move = (source, destination, droppableSource, droppableDestination) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
-};
-
-const grid = 8;
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: 'none',
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
-  borderRadius: '5px',
-
-  // change background colour if dragging
-  background: isDragging ? 'lightgreen' : '#FFFFFF',
-
-  // styles we need to apply on draggables
-  ...draggableStyle
-});
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? '#009CEA' : '#1873D8',
-  padding: grid,
-  width: 400,
-  height: '70vh',
-  overflowY: 'auto'
-});
-
 const createMemberListing = (member, realm) => {
   return (
     <div className="media">
@@ -135,6 +85,151 @@ const createMemberListing = (member, realm) => {
   );
 };
 
+const createDetailedListing = character => {
+  return (
+    <div className="media">
+      <figure className="image is-32x32 media-left">
+        <img
+          className="is-rounded"
+          alt={'character portrait for ' + character.name}
+          src={`${character.portrait}`}
+        />
+      </figure>
+      <span className="media-content">
+        <a
+          href={`https://worldofwarcraft.com/en-us/character/${character.realm.replace(
+            /\W/g,
+            ''
+          )}/${character.name}`}
+          target="_blank"
+        >
+          {character.name}
+          &nbsp;
+          <span className="icon has-text-info">
+            <img
+              className="image is-16x16"
+              alt="world of warcraft logo"
+              src="/wow.png"
+            />
+          </span>
+        </a>
+        <a
+          href={`https://www.warcraftlogs.com/character/us/${character.realm.replace(
+            /\W/g,
+            ''
+          )}/${character.name}`}
+          target="_blank"
+        >
+          <span className="icon has-text-info">
+            <img
+              className="image is-16x16"
+              alt="warcraft logs logo"
+              src="/logs.png"
+            />
+          </span>
+        </a>
+        <a
+          href={`https://raider.io/characters/us/${character.realm.replace(
+            /\W/g,
+            ''
+          )}/${character.name}`}
+          target="_blank"
+        >
+          <span className="icon has-text-info">
+            <img
+              className="image is-16x16"
+              alt="raider io logo"
+              src="/raider.png"
+            />
+          </span>
+        </a>
+      </span>
+      <span className="media-right level">
+        {' '}
+        <figure className="image is-16x16">
+          {_.get(character, 'icon') && (
+            <img
+              className="is-rounded"
+              alt={'character portrait for ' + character.name}
+              src={character.icon}
+            />
+          )}
+        </figure>
+        &nbsp;
+        {'Rank ' + character.rank}
+      </span>
+    </div>
+  );
+};
+
+// a little function to help us with reordering the result
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+/**
+ * Moves an item from one list to another list.
+ */
+const move = (source, destination, droppableSource, droppableDestination) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  console.log(source[droppableSource.index], droppableDestination);
+  if ((droppableDestination.doppableId = 'droppable2')) {
+    sourceClone[droppableSource.index].content = createDetailedListing(
+      sourceClone[droppableSource.index]
+    );
+  }
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result = {};
+  result[droppableSource.droppableId] = sourceClone;
+  result[droppableDestination.droppableId] = destClone;
+
+  return result;
+};
+
+const grid = 8;
+
+const getItemStyle = (isDragging, draggableStyle) => ({
+  // some basic styles to make the items look a bit nicer
+  userSelect: 'none',
+  padding: grid * 2,
+  margin: `0 0 ${grid}px 0`,
+  borderRadius: '5px',
+
+  // change background colour if dragging
+  background: isDragging ? 'lightgreen' : '#FFFFFF',
+
+  // styles we need to apply on draggables
+  ...draggableStyle
+});
+
+const getListStyle = (isDraggingOver, color1, color2) => ({
+  background: isDraggingOver ? color2 : color1,
+  padding: grid,
+  width: 400,
+  maxWidth: '80vw',
+  height: 800,
+  maxHeight: '70vh',
+  overflowY: 'auto'
+});
+
+//TODO take whole character object as input and hydrate, make JSX card, assign to 'content:'
+const createDetailedMemberListing = async (member, realm) => {
+  const response = await fetch(
+    `/singleCharacter?member=${member}&realm=${realm}`,
+    { method: 'GET' }
+  );
+  const detailedCharacter = await response.json();
+  return;
+};
+
 export class Roster extends Component {
   state = {
     items: [
@@ -166,6 +261,7 @@ export class Roster extends Component {
   getList = id => this.state[this.id2List[id]];
 
   onDragEnd = result => {
+    console.log(result);
     const { source, destination } = result;
 
     // dropped outside the list
@@ -209,12 +305,22 @@ export class Roster extends Component {
     const parsedReponse = await response.json();
     const status = parsedReponse.status;
     const roster = parsedReponse.members;
-    console.log(roster);
 
     const formattedMembers = _.map(roster, (member, i) => {
       return {
         id: i,
-        content: createMemberListing(member, realm)
+        content: createMemberListing(member, realm),
+        name: _.get(member, 'character.name'),
+        rank: _.get(member, 'rank'),
+        icon: `https://render-us.worldofwarcraft.com/icons/56/${_.get(
+          member,
+          'character.spec.icon'
+        )}.jpg`,
+        portrait: `https://render-us.worldofwarcraft.com/character/${_.get(
+          member,
+          'character.thumbnail'
+        )}`,
+        realm: realm
       };
     });
 
@@ -245,13 +351,17 @@ export class Roster extends Component {
               </div>
             )}
             <DragDropContext onDragEnd={this.onDragEnd}>
-              <div className="tile is-parent">
-                <div className="tile is-child">
+              <div className="tile is-parent columns">
+                <div className="tile is-child column">
                   <Droppable droppableId="droppable">
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}
+                        style={getListStyle(
+                          snapshot.isDraggingOver,
+                          '#009CEA',
+                          '#1873D8'
+                        )}
                       >
                         {this.state.items.map((item, index) => (
                           <Draggable
@@ -279,12 +389,16 @@ export class Roster extends Component {
                     )}
                   </Droppable>
                 </div>
-                <div className="is-child">
+                <div className="tile is-child column">
                   <Droppable droppableId="droppable2">
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}
+                        style={getListStyle(
+                          snapshot.isDraggingOver,
+                          '#00d168',
+                          '#00b758'
+                        )}
                       >
                         {this.state.selected.map((item, index) => (
                           <Draggable
