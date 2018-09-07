@@ -22,8 +22,14 @@ app.get('/guild', async (req, res) => {
   const guild = req.query.guild;
   const realm = req.query.realm;
   const roster = await api.getRoster(guild, realm);
-  console.log(roster);
   res.send(JSON.stringify(roster));
+});
+
+app.get('/singleCharacter', async (req, res) => {
+  const character = req.query.character;
+  const realm = req.query.realm;
+  const detailedCharacter = await api.getSingleCharacter(character, realm);
+  res.send(JSON.stringify(detailedCharacter));
 });
 
 app.get('/', (req, res) => {

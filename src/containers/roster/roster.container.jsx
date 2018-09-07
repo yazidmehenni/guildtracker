@@ -87,77 +87,109 @@ const createMemberListing = (member, realm) => {
 
 const createDetailedListing = character => {
   return (
-    <div className="media">
-      <figure className="image is-32x32 media-left">
-        <img
-          className="is-rounded"
-          alt={'character portrait for ' + character.name}
-          src={`${character.portrait}`}
-        />
-      </figure>
-      <span className="media-content">
-        <a
-          href={`https://worldofwarcraft.com/en-us/character/${character.realm.replace(
-            /\W/g,
-            ''
-          )}/${character.name}`}
-          target="_blank"
-        >
-          {character.name}
-          &nbsp;
-          <span className="icon has-text-info">
-            <img
-              className="image is-16x16"
-              alt="world of warcraft logo"
-              src="/wow.png"
-            />
-          </span>
-        </a>
-        <a
-          href={`https://www.warcraftlogs.com/character/us/${character.realm.replace(
-            /\W/g,
-            ''
-          )}/${character.name}`}
-          target="_blank"
-        >
-          <span className="icon has-text-info">
-            <img
-              className="image is-16x16"
-              alt="warcraft logs logo"
-              src="/logs.png"
-            />
-          </span>
-        </a>
-        <a
-          href={`https://raider.io/characters/us/${character.realm.replace(
-            /\W/g,
-            ''
-          )}/${character.name}`}
-          target="_blank"
-        >
-          <span className="icon has-text-info">
-            <img
-              className="image is-16x16"
-              alt="raider io logo"
-              src="/raider.png"
-            />
-          </span>
-        </a>
-      </span>
-      <span className="media-right level">
-        {' '}
-        <figure className="image is-16x16">
-          {_.get(character, 'icon') && (
-            <img
-              className="is-rounded"
-              alt={'character portrait for ' + character.name}
-              src={character.icon}
-            />
-          )}
+    <div>
+      <div className="media">
+        <figure className="image is-32x32 media-left">
+          <img
+            className="is-rounded"
+            alt={'character portrait for ' + character.name}
+            src={`${character.portrait}`}
+          />
         </figure>
-        &nbsp;
-        {'Rank ' + character.rank}
-      </span>
+        <span className="media-content">
+          <a
+            href={`https://worldofwarcraft.com/en-us/character/${character.realm.replace(
+              /\W/g,
+              ''
+            )}/${character.name}`}
+            target="_blank"
+          >
+            {character.name}
+            &nbsp;
+            <span className="icon has-text-info">
+              <img
+                className="image is-16x16"
+                alt="world of warcraft logo"
+                src="/wow.png"
+              />
+            </span>
+          </a>
+          <a
+            href={`https://www.warcraftlogs.com/character/us/${character.realm.replace(
+              /\W/g,
+              ''
+            )}/${character.name}`}
+            target="_blank"
+          >
+            <span className="icon has-text-info">
+              <img
+                className="image is-16x16"
+                alt="warcraft logs logo"
+                src="/logs.png"
+              />
+            </span>
+          </a>
+          <a
+            href={`https://raider.io/characters/us/${character.realm.replace(
+              /\W/g,
+              ''
+            )}/${character.name}`}
+            target="_blank"
+          >
+            <span className="icon has-text-info">
+              <img
+                className="image is-16x16"
+                alt="raider io logo"
+                src="/raider.png"
+              />
+            </span>
+          </a>
+          <span className="level-right">Azerite 21</span>
+        </span>
+        <span className="media-right level">
+          {' '}
+          <figure className="image is-16x16">
+            {_.get(character, 'icon') && (
+              <img
+                className="is-rounded"
+                alt={'character portrait for ' + character.name}
+                src={character.icon}
+              />
+            )}
+          </figure>
+          &nbsp;
+          {'Rank ' + character.rank}
+        </span>
+      </div>
+      <div className="level">
+        <span className="media-content level-left">
+          <i className="fas fa-pulse fa-cog fa-spinner" />
+          &nbsp;
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+        </span>
+        <span className="level-right">
+          <i className="fas fa-pulse fa-cog fa-spinner" />
+          &nbsp;
+          <span className="blurryText">{'000(000)'}</span>
+        </span>
+      </div>
     </div>
   );
 };
@@ -177,11 +209,11 @@ const reorder = (list, startIndex, endIndex) => {
 const move = (source, destination, droppableSource, droppableDestination) => {
   const sourceClone = Array.from(source);
   const destClone = Array.from(destination);
-  console.log(source[droppableSource.index], droppableDestination);
   if ((droppableDestination.doppableId = 'droppable2')) {
     sourceClone[droppableSource.index].content = createDetailedListing(
       sourceClone[droppableSource.index]
     );
+    getDetailedMemberListing(sourceClone[droppableSource.index]);
   }
   const [removed] = sourceClone.splice(droppableSource.index, 1);
 
@@ -221,13 +253,19 @@ const getListStyle = (isDraggingOver, color1, color2) => ({
 });
 
 //TODO take whole character object as input and hydrate, make JSX card, assign to 'content:'
-const createDetailedMemberListing = async (member, realm) => {
+const getDetailedMemberListing = async character => {
   const response = await fetch(
-    `/singleCharacter?member=${member}&realm=${realm}`,
+    `/singleCharacter?character=${character.name}&realm=${character.realm}`,
     { method: 'GET' }
   );
   const detailedCharacter = await response.json();
-  return;
+  const newCharacter = { ...character };
+  newCharacter.emptySockets = detailedCharacter.audit.emptySockets;
+  newCharacter.unenchantedItems = detailedCharacter.audit.unenchantedItems;
+  newCharacter.items = detailedCharacter.items;
+  console.log({ detailedCharacter });
+  console.log({ newCharacter });
+  return newCharacter;
 };
 
 export class Roster extends Component {

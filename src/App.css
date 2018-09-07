@@ -26,6 +26,12 @@ th,td {
   margin-right: 1px;
 }
 
+.blurryText {
+    text-shadow: 0 0 8px #989898;
+    color: transparent;
+ }
+
+
 /* LOGO CSS */
 
 

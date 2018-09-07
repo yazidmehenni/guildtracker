@@ -80,7 +80,30 @@ getCharacterDetails = async (character, realm, filteredMembers) => {
   }
 };
 
+getSingleCharacter = async (character, realm) => {
+  try {
+    const params = qs.stringify({
+      locale: env.LOCALE,
+      apikey: env.APIKEY,
+      fields: 'items,audit'
+    });
+    const requestString = `${
+      env.WOW_API
+    }/character/${realm}/${character}?${params}`;
+    //await fetch
+    const response = await fetch(new URL(requestString), {
+      method: 'GET'
+    });
+    const characterDetails = await response.json();
+    return characterDetails;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+
 module.exports = {
   getRoster,
-  updateCharacterDetails
+  updateCharacterDetails,
+  getSingleCharacter
 };
