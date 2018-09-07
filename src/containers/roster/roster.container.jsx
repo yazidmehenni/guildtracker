@@ -63,7 +63,7 @@ const createMemberListing = (member, realm) => {
           </span>
         </a>
       </span>
-      <span className="media-right level">
+      <span className="media-right level is-mobile">
         {' '}
         <figure className="image is-16x16">
           {_.get(member, 'character.spec.icon') && (
@@ -87,66 +87,14 @@ const createMemberListing = (member, realm) => {
 
 const createDetailedListing = character => {
   return (
-    <div className="is-mobile">
-      <div className="level">
-        <figure className="image is-32x32 level-left">
-          <img
-            className="is-rounded"
-            alt={'character portrait for ' + character.name}
-            src={`${character.portrait}`}
-          />
-        </figure>
+    <div>
+      <div className="level is-mobile">
         <span className="level-left">
-          &nbsp;&nbsp;
-          {character.name}
+          <i className="fas fa-pulse fa-cog fa-spinner" />
+          &nbsp;
+          <span className="blurryText">{'Azerite: 21'}</span>
         </span>
-        <span className="level-item">
-          <a
-            href={`https://worldofwarcraft.com/en-us/character/${character.realm.replace(
-              /\W/g,
-              ''
-            )}/${character.name}`}
-            target="_blank"
-          >
-            <span className="icon has-text-info">
-              <img
-                className="image is-16x16"
-                alt="world of warcraft logo"
-                src="/wow.png"
-              />
-            </span>
-          </a>
-          <a
-            href={`https://www.warcraftlogs.com/character/us/${character.realm.replace(
-              /\W/g,
-              ''
-            )}/${character.name}`}
-            target="_blank"
-          >
-            <span className="icon has-text-info">
-              <img
-                className="image is-16x16"
-                alt="warcraft logs logo"
-                src="/logs.png"
-              />
-            </span>
-          </a>
-          <a
-            href={`https://raider.io/characters/us/${character.realm.replace(
-              /\W/g,
-              ''
-            )}/${character.name}`}
-            target="_blank"
-          >
-            <span className="icon has-text-info">
-              <img
-                className="image is-16x16"
-                alt="raider io logo"
-                src="/raider.png"
-              />
-            </span>
-          </a>
-        </span>
+
         <span className="level-right">
           {' '}
           <figure className="image is-16x16">
@@ -162,7 +110,67 @@ const createDetailedListing = character => {
           {'Rank ' + character.rank}
         </span>
       </div>
-      <div className="level">
+      <div className="level is-mobile">
+        <span className="level-item">
+          <figure className="image is-32x32">
+            <img
+              className="is-rounded"
+              alt={'character portrait for ' + character.name}
+              src={`${character.portrait}`}
+            />
+          </figure>
+          &nbsp;&nbsp;
+          {character.name}
+          <span className="">
+            <a
+              href={`https://worldofwarcraft.com/en-us/character/${character.realm.replace(
+                /\W/g,
+                ''
+              )}/${character.name}`}
+              target="_blank"
+            >
+              <span className="icon has-text-info">
+                <img
+                  className="image is-16x16"
+                  alt="world of warcraft logo"
+                  src="/wow.png"
+                />
+              </span>
+            </a>
+            <a
+              href={`https://www.warcraftlogs.com/character/us/${character.realm.replace(
+                /\W/g,
+                ''
+              )}/${character.name}`}
+              target="_blank"
+            >
+              <span className="icon has-text-info">
+                <img
+                  className="image is-16x16"
+                  alt="warcraft logs logo"
+                  src="/logs.png"
+                />
+              </span>
+            </a>
+            <a
+              href={`https://raider.io/characters/us/${character.realm.replace(
+                /\W/g,
+                ''
+              )}/${character.name}`}
+              target="_blank"
+            >
+              <span className="icon has-text-info">
+                <img
+                  className="image is-16x16"
+                  alt="raider io logo"
+                  src="/raider.png"
+                />
+              </span>
+            </a>
+          </span>
+        </span>
+      </div>
+      <div className="level is-mobile">
         <span className="media-content level-left">
           <i className="fas fa-pulse fa-cog fa-spinner" />
           &nbsp;
@@ -248,7 +256,9 @@ const getListStyle = (isDraggingOver, color1, color2) => ({
   padding: grid,
   width: 400,
   height: 800,
-  overflowY: 'auto'
+  overflowY: 'auto',
+  border: '4px solid white',
+  borderRadius: '12px'
 });
 
 //TODO take whole character object as input and hydrate, make JSX card, assign to 'content:'
@@ -388,7 +398,7 @@ export class Roster extends Component {
               </div>
             )}
             <DragDropContext onDragEnd={this.onDragEnd}>
-              <div className="tile is-parent columns">
+              <div className="tile is-parent columns is-mobile">
                 <div className="tile is-child column">
                   <Droppable droppableId="droppable">
                     {(provided, snapshot) => (
