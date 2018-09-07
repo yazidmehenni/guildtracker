@@ -87,16 +87,20 @@ const createMemberListing = (member, realm) => {
 
 const createDetailedListing = character => {
   return (
-    <div>
-      <div className="media">
-        <figure className="image is-32x32 media-left">
+    <div className="is-mobile">
+      <div className="level">
+        <figure className="image is-32x32 level-left">
           <img
             className="is-rounded"
             alt={'character portrait for ' + character.name}
             src={`${character.portrait}`}
           />
         </figure>
-        <span className="media-content">
+        <span className="level-left">
+          &nbsp;&nbsp;
+          {character.name}
+        </span>
+        <span className="level-item">
           <a
             href={`https://worldofwarcraft.com/en-us/character/${character.realm.replace(
               /\W/g,
@@ -104,8 +108,6 @@ const createDetailedListing = character => {
             )}/${character.name}`}
             target="_blank"
           >
-            {character.name}
-            &nbsp;
             <span className="icon has-text-info">
               <img
                 className="image is-16x16"
@@ -144,9 +146,8 @@ const createDetailedListing = character => {
               />
             </span>
           </a>
-          <span className="level-right">Azerite 21</span>
         </span>
-        <span className="media-right level">
+        <span className="level-right">
           {' '}
           <figure className="image is-16x16">
             {_.get(character, 'icon') && (
@@ -246,9 +247,7 @@ const getListStyle = (isDraggingOver, color1, color2) => ({
   background: isDraggingOver ? color2 : color1,
   padding: grid,
   width: 400,
-  maxWidth: '80vw',
   height: 800,
-  maxHeight: '70vh',
   overflowY: 'auto'
 });
 
