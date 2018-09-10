@@ -120,7 +120,7 @@ export default class Processor extends Component {
           : '',
         //AZERITE LEVEL ROW
         member.character.items
-          ? member.character.items.neck.azeriteItem.azeriteLevel
+          ? _.get(member, 'character.items.neck.azeriteItem.azeriteLevel')
           : '',
         //GEM ROW
         member.character.audit ? (
@@ -138,7 +138,7 @@ export default class Processor extends Component {
         ),
         //MH ROW
         member.character.items ? (
-          member.character.items.mainHand.tooltipParams.enchant ? (
+          _.get(member, 'character.items.mainHand.tooltipParams.enchant') ? (
             <span className="icon has-text-success">
               <i className="fas fa-check-circle" />
             </span>
@@ -173,7 +173,7 @@ export default class Processor extends Component {
         ),
         //RING1 ROW
         member.character.items ? (
-          member.character.items.finger1.tooltipParams.enchant ? (
+          _.get(member, 'character.items.finger1.tooltipParams.enchant') ? (
             <span className="icon has-text-success">
               <i className="fas fa-check-circle" />
             </span>
@@ -187,7 +187,7 @@ export default class Processor extends Component {
         ),
         //RING2 ROW
         member.character.items ? (
-          member.character.items.finger2.tooltipParams.enchant ? (
+          _.get(member, 'character.items.finger2.tooltipParams.enchant') ? (
             <span className="icon has-text-success">
               <i className="fas fa-check-circle" />
             </span>
@@ -256,12 +256,12 @@ export default class Processor extends Component {
     this.setState({
       filteredMembers: _.orderBy(
         this.state.filteredMembers,
-        obj => _.get(obj, 'character.items.averageItemLevel'),
+        obj => _.get(obj, 'character.items.averageItemLevel') || '',
         orderBy
       ),
       members: _.orderBy(
         this.state.filteredMembers,
-        obj => _.get(obj, 'character.items.averageItemLevel'),
+        obj => _.get(obj, 'character.items.averageItemLevel') || '',
         orderBy
       ),
       itemLevelOrder: !this.state.itemLevelOrder
@@ -273,12 +273,14 @@ export default class Processor extends Component {
     this.setState({
       filteredMembers: _.orderBy(
         this.state.filteredMembers,
-        obj => _.get(obj, 'character.items.neck.azeriteItem.azeriteLevel'),
+        obj =>
+          _.get(obj, 'character.items.neck.azeriteItem.azeriteLevel') || '',
         orderBy
       ),
       members: _.orderBy(
         this.state.members,
-        obj => _.get(obj, 'character.items.neck.azeriteItem.azeriteLevel'),
+        obj =>
+          _.get(obj, 'character.items.neck.azeriteItem.azeriteLevel') || '',
         orderBy
       ),
       azeriteLvlOrder: !this.state.azeriteLvlOrder
