@@ -203,6 +203,125 @@ const createDetailedListing = character => {
   );
 };
 
+const createLoadedListing = character => {
+  return (
+    <div>
+      <div className="level is-mobile">
+        <span className="level-left">
+          <span>
+            &nbsp;Azerite:&nbsp;
+            {_.get(character, 'items.neck.azeriteItem.azeriteLevel')}
+          </span>
+        </span>
+
+        <span className="level-right">
+          {' '}
+          <figure className="image is-16x16">
+            {_.get(character, 'icon') && (
+              <img
+                className="is-rounded"
+                alt={'character portrait for ' + character.name}
+                src={character.icon}
+              />
+            )}
+          </figure>
+          &nbsp;
+          {'Rank ' + character.rank}
+        </span>
+      </div>
+      <div className="level is-mobile">
+        <span className="level-item">
+          <figure className="image is-32x32">
+            <img
+              className="is-rounded"
+              alt={'character portrait for ' + character.name}
+              src={`${character.portrait}`}
+            />
+          </figure>
+          &nbsp;&nbsp;
+          {character.name}
+          <span className="">
+            <a
+              href={`https://worldofwarcraft.com/en-us/character/${character.realm.replace(
+                /\W/g,
+                ''
+              )}/${character.name}`}
+              target="_blank"
+            >
+              <span className="icon has-text-info">
+                <img
+                  className="image is-16x16"
+                  alt="world of warcraft logo"
+                  src="/wow.png"
+                />
+              </span>
+            </a>
+            <a
+              href={`https://www.warcraftlogs.com/character/us/${character.realm.replace(
+                /\W/g,
+                ''
+              )}/${character.name}`}
+              target="_blank"
+            >
+              <span className="icon has-text-info">
+                <img
+                  className="image is-16x16"
+                  alt="warcraft logs logo"
+                  src="/logs.png"
+                />
+              </span>
+            </a>
+            <a
+              href={`https://raider.io/characters/us/${character.realm.replace(
+                /\W/g,
+                ''
+              )}/${character.name}`}
+              target="_blank"
+            >
+              <span className="icon has-text-info">
+                <img
+                  className="image is-16x16"
+                  alt="raider io logo"
+                  src="/raider.png"
+                />
+              </span>
+            </a>
+          </span>
+        </span>
+      </div>
+      <div className="level is-mobile">
+        <span className="media-content level-left">
+          <i className="fas fa-pulse fa-cog fa-spinner" />
+          &nbsp;
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+          <span className="icon has-text-light">
+            <i className="fas fa-circle" />
+          </span>
+        </span>
+        <span className="level-right">
+          <i className="fas fa-pulse fa-cog fa-spinner" />
+          &nbsp;
+          <span className="blurryText">{'000(000)'}</span>
+        </span>
+      </div>
+    </div>
+  );
+};
+
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -215,25 +334,6 @@ const reorder = (list, startIndex, endIndex) => {
 /**
  * Moves an item from one list to another list.
  */
-const move = (source, destination, droppableSource, droppableDestination) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  if ((droppableDestination.doppableId = 'droppable2')) {
-    sourceClone[droppableSource.index].content = createDetailedListing(
-      sourceClone[droppableSource.index]
-    );
-    getDetailedMemberListing(sourceClone[droppableSource.index]);
-  }
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
-};
 
 const grid = 8;
 
@@ -260,22 +360,6 @@ const getListStyle = (isDraggingOver, color1, color2) => ({
   border: '4px solid white',
   borderRadius: '12px'
 });
-
-//TODO take whole character object as input and hydrate, make JSX card, assign to 'content:'
-const getDetailedMemberListing = async character => {
-  const response = await fetch(
-    `/singleCharacter?character=${character.name}&realm=${character.realm}`,
-    { method: 'GET' }
-  );
-  const detailedCharacter = await response.json();
-  const newCharacter = { ...character };
-  newCharacter.emptySockets = detailedCharacter.audit.emptySockets;
-  newCharacter.unenchantedItems = detailedCharacter.audit.unenchantedItems;
-  newCharacter.items = detailedCharacter.items;
-  console.log({ detailedCharacter });
-  console.log({ newCharacter });
-  return newCharacter;
-};
 
 export class Roster extends Component {
   state = {
@@ -331,7 +415,7 @@ export class Roster extends Component {
 
       this.setState(state);
     } else {
-      const result = move(
+      const result = this.move(
         this.getList(source.droppableId),
         this.getList(destination.droppableId),
         source,
@@ -343,6 +427,55 @@ export class Roster extends Component {
         selected: result.droppable2
       });
     }
+  };
+
+  move = (source, destination, droppableSource, droppableDestination) => {
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(destination);
+    if ((droppableDestination.doppableId = 'droppable2')) {
+      sourceClone[droppableSource.index].content = createDetailedListing(
+        sourceClone[droppableSource.index]
+      );
+      this.getDetailedMemberListing(sourceClone[droppableSource.index]);
+    }
+    const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+    destClone.splice(droppableDestination.index, 0, removed);
+
+    const result = {};
+    result[droppableSource.droppableId] = sourceClone;
+    result[droppableDestination.droppableId] = destClone;
+
+    return result;
+  };
+
+  //TODO take whole character object as input and hydrate, make JSX card, assign to 'content:'
+  getDetailedMemberListing = async character => {
+    const response = await fetch(
+      `/singleCharacter?character=${character.name}&realm=${character.realm}`,
+      { method: 'GET' }
+    );
+    const detailedCharacter = await response.json();
+    const newCharacter = { ...character };
+    newCharacter.emptySockets = detailedCharacter.audit.emptySockets;
+    newCharacter.unenchantedItems = detailedCharacter.audit.unenchantedItems;
+    newCharacter.items = detailedCharacter.items;
+    console.log({ detailedCharacter });
+    console.log({ newCharacter });
+    console.log(this.state.selected);
+    console.log(
+      _.findIndex(this.state.selected, obj => obj.name === character.name)
+    );
+    const characterIndex = _.findIndex(
+      this.state.selected,
+      obj => obj.name === character.name
+    );
+    const cloneSelected = [...this.state.selected];
+    cloneSelected[characterIndex].content = createLoadedListing(newCharacter);
+
+    this.setState({ selected: cloneSelected });
+
+    return newCharacter;
   };
 
   getRoster = async (guild, realm) => {
