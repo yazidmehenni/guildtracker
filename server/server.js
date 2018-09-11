@@ -32,7 +32,7 @@ app.get('/singleCharacter', async (req, res) => {
   res.send(JSON.stringify(detailedCharacter));
 });
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
