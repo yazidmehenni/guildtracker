@@ -189,9 +189,6 @@ const createDetailedListing = character => {
           <span className="icon has-text-light">
             <i className="fas fa-circle" />
           </span>
-          <span className="icon has-text-light">
-            <i className="fas fa-circle" />
-          </span>
         </span>
         <span className="level-right">
           <i className="fas fa-pulse fa-cog fa-spinner" />
@@ -238,7 +235,7 @@ const createLoadedListing = character => {
               src={`${character.portrait}`}
             />
           </figure>
-          &nbsp;&nbsp;
+          &nbsp;
           {character.name}
           <span className="">
             <a
@@ -291,26 +288,68 @@ const createLoadedListing = character => {
       </div>
       <div className="level is-mobile">
         <span className="media-content level-left">
-          <i className="fas fa-pulse fa-cog fa-spinner" />
           &nbsp;
-          <span className="icon has-text-light">
-            <i className="fas fa-circle" />
-          </span>
-          <span className="icon has-text-light">
-            <i className="fas fa-circle" />
-          </span>
-          <span className="icon has-text-light">
-            <i className="fas fa-circle" />
-          </span>
-          <span className="icon has-text-light">
-            <i className="fas fa-circle" />
-          </span>
-          <span className="icon has-text-light">
-            <i className="fas fa-circle" />
-          </span>
-          <span className="icon has-text-light">
-            <i className="fas fa-circle" />
-          </span>
+          {//GEMS
+          character.emptySockets === 0 ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )}
+          {//MH ENCHANT
+          _.get(character, 'items.mainHand.tooltipParams.enchant') ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )}
+          {//OFFHAND
+          character.items.offHand ? (
+            character.items.offHand.tooltipParams.enchant ? (
+              <span className="icon has-text-success">
+                <i className="fas fa-check-circle" />
+              </span>
+            ) : character.audit.unenchantedItems['16'] &&
+            character.class !== 2 ? (
+              <span className="icon has-text-danger">
+                <i className="fas fa-times-circle" />
+              </span>
+            ) : (
+              <span className="icon has-text-danger">
+                <i className="fas fa-times-circle" />
+              </span>
+            )
+          ) : (
+            <span className="icon has-text-light">
+              <i className="fas fa-minus-circle" />
+            </span>
+          )}
+          {//RING1
+          _.get(character, 'items.finger1.tooltipParams.enchant') ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )}
+          {//RING2
+          _.get(character, 'items.finger2.tooltipParams.enchant') ? (
+            <span className="icon has-text-success">
+              <i className="fas fa-check-circle" />
+            </span>
+          ) : (
+            <span className="icon has-text-danger">
+              <i className="fas fa-times-circle" />
+            </span>
+          )}
         </span>
         <span className="level-right">
           &nbsp;&nbsp;
@@ -462,6 +501,8 @@ export class Roster extends Component {
     newCharacter.emptySockets = detailedCharacter.audit.emptySockets;
     newCharacter.unenchantedItems = detailedCharacter.audit.unenchantedItems;
     newCharacter.items = detailedCharacter.items;
+    newCharacter.audit = detailedCharacter.audit;
+    newCharacter.class = detailedCharacter.class;
     console.log({ detailedCharacter });
     console.log({ newCharacter });
     console.log(this.state.selected);
