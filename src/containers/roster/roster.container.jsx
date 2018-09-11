@@ -393,8 +393,8 @@ export class Roster extends Component {
       }
     ],
     selected: [],
-    guildName: 'baewatch',
-    realName: 'malganis'
+    guildName: this.props.guildName,
+    realmName: this.props.realmName
   };
 
   /**
@@ -533,7 +533,7 @@ export class Roster extends Component {
   };
 
   async componentDidMount() {
-    await this.getRoster(this.state.guildName, this.state.realName);
+    await this.getRoster(this.state.guildName, this.state.realmName);
   }
   // Normally you would want to split things out into separate components.
   // But in this example everything is just done in one place for simplicity

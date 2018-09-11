@@ -26,6 +26,14 @@ class App extends Component {
       />
     );
   };
+  renderRoster = routerData => {
+    return (
+      <Roster
+        guildName={routerData.match.params.guildName}
+        realmName={routerData.match.params.realmName}
+      />
+    );
+  };
   renderForm = () => {
     return <Form appCallBack={this.appCallBack} />;
   };
@@ -46,9 +54,9 @@ class App extends Component {
               render={this.renderProcessor}
             />
             <Route
-              exact={false}
-              path={process.env.PUBLIC_URL + '*/roster'}
-              component={Roster}
+              exact={true}
+              path={process.env.PUBLIC_URL + '*/roster/:realmName/:guildName'}
+              render={this.renderRoster}
             />
             <Route
               exact={false}
