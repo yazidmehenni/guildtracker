@@ -450,7 +450,7 @@ export class Roster extends Component {
   move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
-    if ((droppableDestination.doppableId = 'droppable2')) {
+    if (droppableDestination.droppableId === 'droppable2') {
       sourceClone[droppableSource.index].content = createDetailedListing(
         sourceClone[droppableSource.index]
       );
