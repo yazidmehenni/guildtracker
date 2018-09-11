@@ -313,9 +313,11 @@ const createLoadedListing = character => {
           </span>
         </span>
         <span className="level-right">
-          <i className="fas fa-pulse fa-cog fa-spinner" />
-          &nbsp;
-          <span className="blurryText">{'000(000)'}</span>
+          &nbsp;&nbsp;
+          <span>{`${_.get(character, 'items.averageItemLevel')}(${_.get(
+            character,
+            'items.averageItemLevelEquipped'
+          )})`}</span>
         </span>
       </div>
     </div>
