@@ -410,7 +410,6 @@ export class Roster extends Component {
   getList = id => this.state[this.id2List[id]];
 
   onDragEnd = result => {
-    console.log(result);
     const { source, destination } = result;
 
     // dropped outside the list
