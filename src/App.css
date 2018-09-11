@@ -26,6 +26,12 @@ th,td {
   margin-right: 1px;
 }
 
+/* STYLE CARD */
+
+.audit{
+  font-size: 20px;
+}
+
 .blurryText {
     text-shadow: 0 0 8px #989898;
     color: transparent;
@@ -40,4 +46,3 @@ th,td {
   text-align: center;
 }
 
-/* STYLE CARD */

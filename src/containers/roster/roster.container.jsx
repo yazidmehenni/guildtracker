@@ -291,64 +291,41 @@ const createLoadedListing = character => {
           &nbsp;
           {//GEMS
           character.emptySockets === 0 ? (
-            <span className="icon has-text-success">
-              <i className="fas fa-check-circle" />
-            </span>
+            <span className="icon has-text-success audit">🅖</span>
           ) : (
-            <span className="icon has-text-danger">
-              <i className="fas fa-times-circle" />
-            </span>
+            <span className="icon has-text-danger audit">🅖</span>
           )}
           {//MH ENCHANT
           _.get(character, 'items.mainHand.tooltipParams.enchant') ? (
-            <span className="icon has-text-success">
-              <i className="fas fa-check-circle" />
-            </span>
+            <span className="icon has-text-success audit">🅜</span>
           ) : (
-            <span className="icon has-text-danger">
-              <i className="fas fa-times-circle" />
-            </span>
+            <span className="icon has-text-danger audit">🅜</span>
           )}
           {//OFFHAND
           character.items.offHand ? (
             character.items.offHand.tooltipParams.enchant ? (
-              <span className="icon has-text-success">
-                <i className="fas fa-check-circle" />
-              </span>
+              <span className="icon has-text-success audit">🅞</span>
             ) : character.audit.unenchantedItems['16'] &&
-            character.class !== 2 ? (
-              <span className="icon has-text-danger">
-                <i className="fas fa-times-circle" />
-              </span>
+            character.class !== 2 &&
+            character.spec !== 'Arms' ? (
+              <span className="icon has-text-danger audit">🅞</span>
             ) : (
-              <span className="icon has-text-danger">
-                <i className="fas fa-times-circle" />
-              </span>
+              <span className="icon has-text-light audit">🅞</span>
             )
           ) : (
-            <span className="icon has-text-light">
-              <i className="fas fa-minus-circle" />
-            </span>
+            <span className="icon has-text-light audit">🅞</span>
           )}
           {//RING1
           _.get(character, 'items.finger1.tooltipParams.enchant') ? (
-            <span className="icon has-text-success">
-              <i className="fas fa-check-circle" />
-            </span>
+            <span className="icon has-text-success audit">🅡</span>
           ) : (
-            <span className="icon has-text-danger">
-              <i className="fas fa-times-circle" />
-            </span>
+            <span className="icon has-text-danger audit">🅡</span>
           )}
           {//RING2
           _.get(character, 'items.finger2.tooltipParams.enchant') ? (
-            <span className="icon has-text-success">
-              <i className="fas fa-check-circle" />
-            </span>
+            <span className="icon has-text-success audit">🅡</span>
           ) : (
-            <span className="icon has-text-danger">
-              <i className="fas fa-times-circle" />
-            </span>
+            <span className="icon has-text-danger audit">🅡</span>
           )}
         </span>
         <span className="level-right">
@@ -543,7 +520,8 @@ export class Roster extends Component {
           member,
           'character.thumbnail'
         )}`,
-        realm: realm
+        realm: realm,
+        spec: _.get(member, 'character.spec.name')
       };
     });
 
