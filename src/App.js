@@ -3,6 +3,7 @@ import './App.css';
 import './bulma.css';
 import Processor from './containers/processor/processor.container.jsx';
 import Form from './components/form.component.jsx';
+import { Roster } from './containers/roster/roster.container.jsx';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
 class App extends Component {
@@ -25,6 +26,14 @@ class App extends Component {
       />
     );
   };
+  renderRoster = routerData => {
+    return (
+      <Roster
+        guildName={routerData.match.params.guildName}
+        realmName={routerData.match.params.realmName}
+      />
+    );
+  };
   renderForm = () => {
     return <Form appCallBack={this.appCallBack} />;
   };
@@ -43,6 +52,11 @@ class App extends Component {
               exact={false}
               path={process.env.PUBLIC_URL + '*/results/:realmName/:guildName'}
               render={this.renderProcessor}
+            />
+            <Route
+              exact={true}
+              path={process.env.PUBLIC_URL + '*/roster/:realmName/:guildName'}
+              render={this.renderRoster}
             />
             <Route
               exact={false}

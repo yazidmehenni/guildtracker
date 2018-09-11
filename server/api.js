@@ -6,6 +6,7 @@ const env = require('./env/env.js');
 
 getRoster = async (guild, realm) => {
   //set up request string
+  console.log('getting roster');
   const params = qs.stringify({
     locale: env.LOCALE,
     apikey: env.APIKEY,
@@ -17,10 +18,14 @@ getRoster = async (guild, realm) => {
     method: 'GET'
   });
   const guildRoster = await response.json();
+  console.log('response:', guildRoster);
   //error handling
   let status = null;
   if (guildRoster.status === 'nok') {
-    status = 'Invalid Guild Name or Realm';
+    status = `Blizzard API: ${guildRoster.reason}`;
+  }
+  if (guildRoster.code) {
+    status = `Blizzard API: ${guildRoster.type}`;
   }
   //filter response
   const filteredMembers = _.filter(
@@ -75,7 +80,30 @@ getCharacterDetails = async (character, realm, filteredMembers) => {
   }
 };
 
+getSingleCharacter = async (character, realm) => {
+  try {
+    const params = qs.stringify({
+      locale: env.LOCALE,
+      apikey: env.APIKEY,
+      fields: 'items,audit'
+    });
+    const requestString = `${
+      env.WOW_API
+    }/character/${realm}/${character}?${params}`;
+    //await fetch
+    const response = await fetch(new URL(requestString), {
+      method: 'GET'
+    });
+    const characterDetails = await response.json();
+    return characterDetails;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+
 module.exports = {
   getRoster,
-  updateCharacterDetails
+  updateCharacterDetails,
+  getSingleCharacter
 };
