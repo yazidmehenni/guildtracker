@@ -59,7 +59,7 @@ class App extends Component {
               render={this.renderRoster}
             />
             <Route
-              exact={false}
+              exact={true}
               path={process.env.PUBLIC_URL + '*/'}
               render={this.renderForm}
             />
