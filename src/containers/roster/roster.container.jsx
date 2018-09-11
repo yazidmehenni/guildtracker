@@ -480,12 +480,6 @@ export class Roster extends Component {
     newCharacter.items = detailedCharacter.items;
     newCharacter.audit = detailedCharacter.audit;
     newCharacter.class = detailedCharacter.class;
-    console.log({ detailedCharacter });
-    console.log({ newCharacter });
-    console.log(this.state.selected);
-    console.log(
-      _.findIndex(this.state.selected, obj => obj.name === character.name)
-    );
     const characterIndex = _.findIndex(
       this.state.selected,
       obj => obj.name === character.name
